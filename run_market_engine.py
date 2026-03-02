@@ -9,6 +9,7 @@ from src.trend.market_forecast import (
 )
 from src.trend.market_intelligence import run_market_intelligence
 from src.trend.event_signal_engine import run_event_signals
+from src.trend.explainability_engine import run_explainability_engine
 import json
 from datetime import datetime
 import os
@@ -40,6 +41,9 @@ def main():
     print("Running brand forecast...")
     brand_forecast = forecast_brand_sentiment(BASE_DIR)
 
+    print("Running explainability engine...")
+    explainability_output = run_explainability_engine(BASE_DIR)
+
     # 🔥 MODIFY FINAL OUTPUT
     final_output = {
         "timestamp": str(datetime.now()),
@@ -48,7 +52,8 @@ def main():
         "forecast_signals": {
             "market_forecast": market_forecast,
             "brand_forecast": brand_forecast
-        }
+        },
+        "explainability": explainability_output
     }
 
     with open("data/processed/final_market_signal.json", "w") as f:
