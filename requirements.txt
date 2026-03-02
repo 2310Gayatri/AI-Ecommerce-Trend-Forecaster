@@ -1,0 +1,11 @@
+pandas
+numpy
+requests
+nltk
+vaderSentiment
+textblob
+scikit-learn
+python-dotenv
+transformers
+torch
+matplotlib
