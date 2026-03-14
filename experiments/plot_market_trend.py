@@ -4,7 +4,7 @@ import os
 
 print("Plotting Market Sentiment Trend...")
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src", ".."))
 
 input_path = os.path.join(BASE_DIR, "data", "processed", "daily_sentiment_index.csv")
 

@@ -4,12 +4,15 @@ import torch
 import os
 import json
 
+# Project root
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")
+)
+
 
 def run_finbert():
 
     print("Starting FinBERT analysis...")
-
-    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
 
     input_path = os.path.join(BASE_DIR, "data", "processed", "cleaned_news.csv")
     output_path = os.path.join(BASE_DIR, "data", "processed", "finbert_output.csv")
@@ -18,15 +21,25 @@ def run_finbert():
     df = pd.read_csv(input_path)
 
     model_name = "ProsusAI/finbert"
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-    labels = []
-    scores = []
+    model.eval()
 
-    for text in df["Cleaned_Text"]:
+    texts = df["Cleaned_Text"].astype(str).tolist()
+
+    batch_size = 16
+
+    labels = []
+    confidences = []
+
+    for i in range(0, len(texts), batch_size):
+
+        batch_texts = texts[i:i + batch_size]
+
         inputs = tokenizer(
-            str(text),
+            batch_texts,
             return_tensors="pt",
             truncation=True,
             padding=True,
@@ -36,16 +49,19 @@ def run_finbert():
         with torch.no_grad():
             outputs = model(**inputs)
 
-        probabilities = torch.nn.functional.softmax(outputs.logits, dim=1)
-        confidence, predicted_class = torch.max(probabilities, dim=1)
+        probs = torch.nn.functional.softmax(outputs.logits, dim=1)
 
-        label = model.config.id2label[predicted_class.item()]
+        batch_conf, batch_pred = torch.max(probs, dim=1)
 
-        labels.append(label)
-        scores.append(float(confidence.item()))
+        for conf, pred in zip(batch_conf, batch_pred):
+
+            label = model.config.id2label[pred.item()]
+
+            labels.append(label)
+            confidences.append(float(conf.item()))
 
     df["finbert_label"] = labels
-    df["finbert_confidence"] = scores
+    df["finbert_confidence"] = confidences
 
     df.to_csv(output_path, index=False)
 

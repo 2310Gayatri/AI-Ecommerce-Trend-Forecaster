@@ -1,18 +1,26 @@
-import os
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+import sys
+import os
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+)
+
+from src.utils.data_loader import (
+    load_daily_metrics,
+    load_brand_metrics
+)
 
 
-def forecast_market_sentiment(base_dir, forecast_days=7):
-    input_path = os.path.join(
-        base_dir, "data", "processed", "daily_sentiment_index.csv"
-    )
+# ----------------------------------
+# Market Sentiment Forecast
+# ----------------------------------
 
-    if not os.path.exists(input_path):
-        return {"error": "daily_sentiment_index.csv not found"}
+def forecast_market_sentiment(forecast_days=7):
 
-    df = pd.read_csv(input_path)
+    df = load_daily_metrics()
 
     if df.empty or len(df) < 3:
         return {"error": "Not enough data for market forecasting"}
@@ -21,7 +29,7 @@ def forecast_market_sentiment(base_dir, forecast_days=7):
     df["time_index"] = range(len(df))
 
     X = df[["time_index"]]
-    y = df["sentiment_score"]
+    y = df["sentiment_index"]
 
     model = LinearRegression()
     model.fit(X, y)
@@ -32,6 +40,7 @@ def forecast_market_sentiment(base_dir, forecast_days=7):
     future_indices = pd.DataFrame({
         "time_index": range(len(df), len(df) + forecast_days)
     })
+
     future_predictions = model.predict(future_indices)
 
     if slope > 0.01:
@@ -42,6 +51,7 @@ def forecast_market_sentiment(base_dir, forecast_days=7):
         trend = "Stable"
 
     data_points = len(df)
+
     if data_points < 10:
         confidence = "Low"
     elif data_points < 30:
@@ -57,37 +67,37 @@ def forecast_market_sentiment(base_dir, forecast_days=7):
         "confidence": confidence,
         "predicted_values": [
             round(float(val), 4) for val in future_predictions
-        ],
+        ]
     }
 
 
-def forecast_brand_sentiment(base_dir, forecast_days=7):
-    input_path = os.path.join(
-        base_dir, "data", "processed", "brand_daily_sentiment_index.csv"
-    )
+# ----------------------------------
+# Brand Sentiment Forecast
+# ----------------------------------
 
-    if not os.path.exists(input_path):
-        return {"error": "brand_daily_sentiment_index.csv not found"}
+def forecast_brand_sentiment(forecast_days=7):
 
-    df = pd.read_csv(input_path)
+    df = load_brand_metrics()
 
     if df.empty:
         return {"error": "No brand data available"}
 
     df = df.sort_values("date")
+
     brand_forecasts = []
 
     for brand in df["Brand"].unique():
+
         brand_df = df[df["Brand"] == brand].copy()
-        brand_df = brand_df.sort_values("date")
 
         if len(brand_df) < 3:
             continue
 
+        brand_df = brand_df.sort_values("date")
         brand_df["time_index"] = range(len(brand_df))
 
         X = brand_df[["time_index"]]
-        y = brand_df["sentiment_score"]
+        y = brand_df["sentiment_index"]
 
         model = LinearRegression()
         model.fit(X, y)
@@ -96,7 +106,7 @@ def forecast_brand_sentiment(base_dir, forecast_days=7):
         volatility = float(np.std(y))
 
         future_indices = pd.DataFrame({
-            "time_index": range(len(df), len(df) + forecast_days)
+            "time_index": range(len(brand_df), len(brand_df) + forecast_days)
         })
 
         future_predictions = model.predict(future_indices)
@@ -123,7 +133,7 @@ def forecast_brand_sentiment(base_dir, forecast_days=7):
             "confidence": confidence,
             "predicted_values": [
                 round(float(val), 4) for val in future_predictions
-            ],
+            ]
         })
 
     return {

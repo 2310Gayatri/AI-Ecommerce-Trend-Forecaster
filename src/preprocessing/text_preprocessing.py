@@ -7,6 +7,11 @@ from nltk.corpus import stopwords
 # Load stopwords
 stop_words = set(stopwords.words("english"))
 
+# Project root (TEAM-REPO)
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")
+)
+
 
 def clean_text(text):
     """
@@ -36,25 +41,10 @@ def preprocess_news_data():
     Process raw news data and save cleaned dataset.
     """
 
-    # Get project root directory
-    project_root = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../../")
-    )
+    raw_path = os.path.join(BASE_DIR, "data", "raw", "news_data.csv")
+    processed_dir = os.path.join(BASE_DIR, "data", "processed")
 
-    raw_path = os.path.join(
-        project_root,
-        "../../data",
-        "raw",
-        "news_data.csv"
-    )
-
-    processed_path = os.path.join(
-        project_root,
-        "../../data",
-        "processed"
-    )
-
-    os.makedirs(processed_path, exist_ok=True)
+    os.makedirs(processed_dir, exist_ok=True)
 
     # Load raw dataset
     df = pd.read_csv(raw_path)
@@ -70,14 +60,16 @@ def preprocess_news_data():
 
     # Select required columns
     df_final = df[
-        ["brand",
-         "source",
-         "published_at",
-         "combined_text",
-         "cleaned_text"]
+        [
+            "brand",
+            "source",
+            "published_at",
+            "combined_text",
+            "cleaned_text"
+        ]
     ]
 
-    # Rename columns for clarity
+    # Rename columns
     df_final.columns = [
         "Brand",
         "Source",
@@ -86,11 +78,8 @@ def preprocess_news_data():
         "Cleaned_Text"
     ]
 
-    # Save processed file
-    save_path = os.path.join(
-        processed_path,
-        "../../data/processed/cleaned_news.csv"
-    )
+    # Save cleaned dataset
+    save_path = os.path.join(processed_dir, "cleaned_news.csv")
 
     df_final.to_csv(save_path, index=False)
 
@@ -104,7 +93,3 @@ if __name__ == "__main__":
     print("\nStarting preprocessing...\n")
     preprocess_news_data()
     print("\nPreprocessing completed successfully.\n")
-
-
-
-

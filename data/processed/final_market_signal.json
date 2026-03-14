@@ -1,0 +1,254 @@
+{
+    "timestamp": "2026-03-12 21:01:36.725752",
+    "market_signals": {
+        "market_direction": "Bearish",
+        "market_slope": -0.017847,
+        "current_sentiment": 0.068966,
+        "top_positive_brand": "Flipkart",
+        "top_negative_brand": "Meesho",
+        "most_volatile_brand": "BigBasket"
+    },
+    "event_signals": {
+        "competition_intensity": "Low",
+        "competition_ratio": 0.0,
+        "complaint_pressure": "Low",
+        "complaint_ratio": 0.0,
+        "sector_heat": "High Narrative Heat",
+        "heat_ratio": 3.17,
+        "competition_brands": [
+            "BigBasket",
+            "Meesho",
+            "Snapdeal",
+            "Flipkart"
+        ],
+        "complaint_brands": []
+    },
+    "forecast_signals": {
+        "market_forecast": {
+            "forecast_days": 7,
+            "trend_direction": "Bearish",
+            "trend_slope": -0.0178,
+            "volatility": 0.5045,
+            "confidence": "Medium",
+            "predicted_values": [
+                -0.1758,
+                -0.1937,
+                -0.2115,
+                -0.2294,
+                -0.2472,
+                -0.2651,
+                -0.2829
+            ]
+        },
+        "brand_forecast": {
+            "forecast_days": 7,
+            "brand_forecasts": [
+                {
+                    "brand": "Ajio",
+                    "trend_direction": "Improving",
+                    "trend_slope": 0.1,
+                    "volatility": 0.433,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        0.5,
+                        0.6,
+                        0.7,
+                        0.8,
+                        0.9,
+                        1.0,
+                        1.1
+                    ]
+                },
+                {
+                    "brand": "Snapdeal",
+                    "trend_direction": "Stable",
+                    "trend_slope": 0.0,
+                    "volatility": 0.4714,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        -0.3333,
+                        -0.3333,
+                        -0.3333,
+                        -0.3333,
+                        -0.3333,
+                        -0.3333,
+                        -0.3333
+                    ]
+                },
+                {
+                    "brand": "BigBasket",
+                    "trend_direction": "Improving",
+                    "trend_slope": 0.019,
+                    "volatility": 0.6573,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        0.0111,
+                        0.0302,
+                        0.0492,
+                        0.0683,
+                        0.0873,
+                        0.1063,
+                        0.1254
+                    ]
+                },
+                {
+                    "brand": "Meesho",
+                    "trend_direction": "Declining",
+                    "trend_slope": -0.25,
+                    "volatility": 0.5416,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        -0.7833,
+                        -1.0333,
+                        -1.2833,
+                        -1.5333,
+                        -1.7833,
+                        -2.0333,
+                        -2.2833
+                    ]
+                },
+                {
+                    "brand": "Nykaa",
+                    "trend_direction": "Declining",
+                    "trend_slope": -0.1429,
+                    "volatility": 0.1347,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        -0.381,
+                        -0.5238,
+                        -0.6667,
+                        -0.8095,
+                        -0.9524,
+                        -1.0952,
+                        -1.2381
+                    ]
+                },
+                {
+                    "brand": "Myntra",
+                    "trend_direction": "Improving",
+                    "trend_slope": 0.1,
+                    "volatility": 0.433,
+                    "confidence": "Low",
+                    "predicted_values": [
+                        -0.0,
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4,
+                        0.5,
+                        0.6
+                    ]
+                }
+            ]
+        }
+    },
+    "explainability": {
+        "market_explainability": {
+            "primary_negative_brands": [
+                "Amazon India",
+                "BigBasket"
+            ],
+            "primary_positive_brands": [
+                "Reliance Digital",
+                "Ajio"
+            ],
+            "representative_negative_articles": [
+                "Induction stoves fly off shelves amid LPG supply concerns Induction stove sales soar in India as LPG supply fears drive consumers to seek alternative cooking solutions amid global tensions.",
+                "Ghosted by the bot: Why IndiaMART is desperate to be visible on ChatGPT Users are increasingly asking chatbots what to buy, where to buy it and at what price. IndiaMART has dragged OpenAI to court, arguing that its exclusion from such results on ChatGPT has had a catastrophic impact on its business.",
+                "\u201cThere's no beef,\": Cal Raleigh responds after Randy Arozarena unleashes four-language rant after WBC snub A viral World Baseball Classic moment between teammates Cal Raleigh and Randy Arozarena, initially perceived as tension, has sparked debate. While Raleigh downplayed the incident, calling Arozarena his \"brother,\" Arozarena responded with a fiery, multi-lingua\u2026"
+            ],
+            "representative_positive_articles": [
+                "Skye Air Mobility raises $9 million in Series B to expand drone delivery network With the new investment, the company intends to expand its drone delivery operations beyond Delhi-NCR into major cities including Bengaluru, Mumbai, Pune, Hyderabad and Kolkata as demand for drone logistics continues to grow rapidly in India.",
+                "VFS Global wins Award of Excellence and 4.0-star Innovation Rating at the 16th Aegis Graham Bell Awards Recognised for\u00a0GenAI-powered Intelligent Document Processing (IDP) and responsible AI deployment at scale",
+                "Induction cooktops, electric kettles sales surge amid LPG supply concerns Tata Group's Croma said it has observed a threefold jump in demand for induction cooktops over the past few days, while Stovekraft Ltd, the company behind the popular kitchen appliance brand Pigeon, noted that its average weekly online sales have jumped four \u2026"
+            ],
+            "dominant_negative_keywords": [
+                "iphone",
+                "ccpa",
+                "toys"
+            ],
+            "causal_interpretation": "Negative sentiment appears primarily regulatory-driven."
+        },
+        "brand_explainability": [
+            {
+                "brand": "Flipkart",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [
+                    "induction",
+                    "amid"
+                ],
+                "representative_article": "Induction stoves fly off shelves amid LPG supply concerns Induction stove sales soar in India as LPG supply fears drive consumers to seek alternative cooking solutions amid global tensions."
+            },
+            {
+                "brand": "Amazon India",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [
+                    "arozarena",
+                    "raleigh",
+                    "metro"
+                ],
+                "representative_article": "\u201cThere's no beef,\": Cal Raleigh responds after Randy Arozarena unleashes four-language rant after WBC snub A viral World Baseball Classic moment between teammates Cal Raleigh and Randy Arozarena, initially perceived as tension, has sparked debate. While Raleigh downplayed the incident, calling Arozarena his \"brother,\" Arozarena responded with a fiery, multi-lingua\u2026"
+            },
+            {
+                "brand": "Myntra",
+                "trend_driver": "Market/IPO-driven",
+                "dominant_keywords": [
+                    "flipkart",
+                    "trims",
+                    "workforce"
+                ],
+                "representative_article": "Flipkart trims workforce by up to 300 employees amid restructuring push Flipkart cuts 250\u2013300 jobs after annual performance review as the Walmart-backed e-commerce giant strengthens leadership and prepares for a potential IPO."
+            },
+            {
+                "brand": "Snapdeal",
+                "trend_driver": "Regulatory-driven",
+                "dominant_keywords": [
+                    "ccpa",
+                    "toys",
+                    "snapdeal"
+                ],
+                "representative_article": "CCPA fines Snapdeal \u20b95 lakh for selling toys violating BIS standards The Central Consumer Protection Authority (CCPA) has imposed a penalty of Rs 5 lakh on e-commerce platform Snapdeal for selling toys that do not comply with mandatory Bureau of Indian Standards certification, violating the Toys (Quality Control) Order, 2020.\n\u2026"
+            },
+            {
+                "brand": "Meesho",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [
+                    "crore"
+                ],
+                "representative_article": "Meesho shares plunge 10% on Rs 1,500 crore tax demand; down 44% from Dec high Shares of Meesho fell 10% to hit the lower circuit after the company revealed a Rs 1,500-crore tax demand from the Income Tax Department, nearly half of its Q3 operating revenue. The demand relates to the 2023-24 assessment year. Meesho said it disagrees with\u2026"
+            },
+            {
+                "brand": "Ajio",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [],
+                "representative_article": null
+            },
+            {
+                "brand": "BigBasket",
+                "trend_driver": "Competition-driven",
+                "dominant_keywords": [
+                    "iphone",
+                    "card",
+                    "tata"
+                ],
+                "representative_article": "Axis Bank\u2019s Airtel Credit Card Devalued: Lounge Access Removed, Cashback Structure Reworked from April 2026 The Airtel Axis Bank Credit Card has been sharply restructured, because all the benefits now depend on how much you spend on the card. Here are the details. \nThe post Axis Bank\u2019s Airtel Credit Card Devalued: Lounge Access Removed, Cashback Structure Reworked \u2026"
+            },
+            {
+                "brand": "Nykaa",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [
+                    "bengal",
+                    "mamata",
+                    "banerjee"
+                ],
+                "representative_article": "Photo in hand, Bengal CM Mamata Banerjee flags \u2018proof of who respects President\u2019 Bengal CM Mamata Banerjee countered PM Modi's accusation of disrespecting the presidential chair by sharing a photo of him seated while President Murmu stood. She argued the state government had informed organizers of its inability to attend the Siliguri even\u2026"
+            },
+            {
+                "brand": "Reliance Digital",
+                "trend_driver": "Broad-based or Low signal",
+                "dominant_keywords": [],
+                "representative_article": null
+            }
+        ]
+    }
+}

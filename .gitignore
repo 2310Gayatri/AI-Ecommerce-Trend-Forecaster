@@ -1,17 +1,28 @@
-../.venv/
+# ---------------------------
+# Virtual Environment
+# ---------------------------
+.venv/
 .env
-# Python cache
+
+# ---------------------------
+# Python Cache
+# ---------------------------
 __pycache__/
 *.pyc
 
-# IDE settings
+# ---------------------------
+# IDE Settings
+# ---------------------------
 .idea/
 .vscode/
 
-# Ignore generated data files
-data/raw/*
-data/processed/*
+# ---------------------------
+# Data Files (Generated)
+# ---------------------------
+data/*
 
 # Keep folder structure
+!data/raw/
+!data/processed/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
