@@ -22,12 +22,16 @@ src/rag/vector_store/
 # ---------------------------
 # Data Files (Generated)
 # ---------------------------
-data/*
-data/processed/*.txt
+data/raw/*
+data/processed/*
+data/output/*
+
+# Ignore generated data
+*.csv
+*.json
+*.txt
 
 # Keep folder structure
-!data/raw/
-!data/processed/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
