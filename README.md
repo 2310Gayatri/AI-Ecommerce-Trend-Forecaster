@@ -1,194 +1,322 @@
-# 📊 AI-Powered E-Commerce Market Signal & Forecast Engine
+# AI-Powered E-Commerce Market Intelligence & Trend Forecast Engine
 
-This project builds a multi-layered AI pipeline that collects real-time e-commerce news, performs financial sentiment analysis, detects competitive signals, and generates short-term market forecasts.
+An AI-driven analytics platform that analyzes news sentiment, emerging narratives, and market signals to generate consumer trend insights and sentiment forecasts for the e-commerce industry.
 
-The system transforms raw news into structured market intelligence.
-
----
-
-## 🚀 Core Capabilities
-
-### 🔹 Real-Time News Ingestion
-- Multi-brand tracking via **NewsAPI**
-- 17+ Indian e-commerce brands monitored
-- Structured raw data storage
+The system combines NLP models, machine learning forecasting, and Retrieval-Augmented Generation (RAG) to convert raw news data into structured market intelligence.
 
 ---
 
-### 🔹 Advanced Sentiment Analysis
-- **VADER** (rule-based baseline)
-- **TextBlob** (lexicon-based baseline)
-- **FinBERT** (finance-domain transformer model)
-- Article-level polarity classification
-- Confidence scoring
+## Project Features
+
+### Data Collection
+Collects e-commerce related news articles using NewsAPI and tracks multiple Indian e-commerce brands.
+
+### Sentiment Analysis
+Uses FinBERT (financial transformer model) for sentiment analysis and generates sentiment scores for each article.
+
+### Topic Modeling
+Uses LLM-based topic classification to extract emerging narratives such as logistics, expansion, funding, customer complaints, and regulations.
+
+### Market Intelligence Engine
+Detects key signals including:
+- market sentiment trend
+- brand momentum
+- narrative momentum
+- sentiment volatility
+- topic drivers
+
+### Event Signal Engine
+Identifies sector-wide signals like:
+- competition intensity
+- complaint pressure
+- sector narrative heat
+
+### Forecasting Engine
+Uses Random Forest Regression to forecast:
+- 7-day sentiment trend
+- 30-day sentiment trend
+- 90-day sentiment trend
+
+### RAG Market Insight Engine
+Uses LangChain + FAISS + Llama (Groq API) to generate:
+- AI-generated market explanations
+- contextual consumer insights
+- market risk signals
+
+### Explainability Layer
+Provides transparency via:
+- feature importance
+- forecast drivers
+- narrative attribution
+
+### AI Market Report Generator
+Automatically produces a human-readable market intelligence report.
 
 ---
 
-### 🔹 Daily Market Sentiment Index
-- Converts sentiment to numeric values
-- Aggregates into daily average index
-- Time-series representation of overall market mood
+## Project Architecture
+
+```
+
+News API
+↓
+Data Ingestion
+↓
+Text Preprocessing
+↓
+FinBERT Sentiment Analysis
+↓
+LLM Topic Extraction
+↓
+Master Dataset
+↓
+Analytics Engines
+↓
+Market Intelligence
+↓
+RAG Insight Engine
+↓
+ML Forecast Model
+↓
+Explainability Engine
+↓
+AI Market Report
+
+```
 
 ---
 
-### 🔹 Brand-Level Intelligence
-- Brand daily sentiment index
-- Brand momentum detection
-- Brand volatility analysis
-- Top improving & declining brands
+## Project Structure
 
----
+```
 
-### 🔹 Event Signal Engine
-
-Detects structural signals such as:
-
-- 🔥 Competition intensity  
-- ⚠️ Complaint pressure  
-- 📢 Sector narrative heat  
-
-Uses ratio-based classification and keyword-driven detection.
-
----
-
-### 🔹 Forecast Engine
-- 7-day market sentiment forecast
-- 7-day brand-level sentiment forecast
-- Linear regression trend projection
-- Volatility measurement
-- Confidence scoring
-
----
-
-### 🔹 Unified Output
-
-Generates structured output:
-data/processed/final_market_signal.json
-
-
-Includes:
-- Market signals
-- Event signals
-- Forecast signals
-
-Fully backend-ready.
-
----
-
-## 🏗 Project Structure
-
-AI-Ecommerce-Trend-Forecaster/
+AI-Ecommerce-Trend-Forecaster
 │
-├── src/
-│   ├── ingestion/
-│   ├── preprocessing/
-│   ├── sentiment/
-│   ├── trend/
-│   │   ├── daily_sentiment_index.py
-│   │   ├── brand_daily_index.py
-│   │   ├── market_forecast.py
-│   │   ├── market_intelligence.py
-│   │   ├── event_signal_engine.py
-│   │   └── ...
-│   └── topic_modeling/ (planned expansion)
+├── src
+│   ├── ingestion
+│   ├── preprocessing
+│   ├── sentiment
+│   ├── topic_modeling
+│   ├── analytics
+│   ├── intelligence
+│   ├── narrative
+│   ├── models
+│   ├── rag
+│   └── utils
 │
-├── data/
-│   ├── raw/
-│   └── processed/
+├── data
+│   ├── raw
+│   ├── processed
+│   └── output
+│
+├── vector_store
 │
 ├── run_market_engine.py
-├── config.py
 ├── requirements.txt
-├── .env.example
 └── README.md
+
+````
+
+### Directory Notes
+
+**src/**  
+Contains the core modules of the project pipeline including ingestion, sentiment analysis, topic modeling, forecasting models, and RAG engines.
+
+**data/**  
+Stores raw, processed, and output datasets generated throughout the pipeline.
+
+**vector_store/**  
+FAISS vector database used for semantic retrieval in the RAG insight engine.
 
 ---
 
-## ⚙️ Setup Instructions
+## Installation & Setup
 
-### 1️⃣ Clone the Repository
-
+### Clone Repository
 ```bash
-git clone <repo-url>
+git clone https://github.com/your-repo-name.git
 cd AI-Ecommerce-Trend-Forecaster
-```
-2️⃣ Create Virtual Environment
+````
+
+### Create Virtual Environment
+
 ```bash
-2python -m venv .venv
+python -m venv .venv
+```
+
+Activate environment:
+
+Windows
+
+```bash
 .venv\Scripts\activate
 ```
 
-Mac / Linux
+Mac/Linux
+
 ```bash
-python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-3️⃣ Install Dependencies
+### Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
-4️⃣ Configure Environment
 
-1. Create a .env file in the root directory:
+---
 
-2. NEWS_API_KEY=your_news_api_key
-```bash
-NEWS_API_KEY=your_actual_news_api_key_here
+## Environment Variables
+
+Create a `.env` file in the project root.
+
 ```
-3. Get your API key from:
-👉 https://newsapi.org
+GROQ_API_KEY=your_groq_api_key
+NEWS_API_KEY=your_newsapi_key
+```
 
-⚠️ Do NOT commit your .env file to GitHub.
+These are required for:
 
-▶️ Run Complete Pipeline
+* Groq LLM API
+* NewsAPI ingestion
+
+---
+
+## Running the Pipeline
+
+Execute the full system:
+
 ```bash
 python run_market_engine.py
 ```
-The pipeline executes:
 
-1. Ingestion
-2. Preprocessing
-3. Sentiment analysis
-4. Daily index generation
-5. Brand intelligence
-6. Event signal detection
-7. Market & brand forecasting
-8. Final JSON export
+This runs:
 
-📊 Output Example
+1. News ingestion
+2. Text preprocessing
+3. FinBERT sentiment analysis
+4. LLM topic extraction
+5. Master dataset creation
+6. Market intelligence analytics
+7. Event signal detection
+8. Narrative intelligence
+9. Forecast generation
+10. RAG market insights
+11. Explainability engine
+12. AI market report generation
 
-Final structured output:
-```bash
+---
+
+## Output Files
+
+### Structured Data
+
+```
 data/processed/final_market_signal.json
 ```
+
 Contains:
 
-📉 Market direction (Bullish / Bearish / Stable)
+* market signals
+* topic insights
+* event signals
+* forecast predictions
+* RAG explanations
 
-🔥 Competition intensity
+### AI Generated Market Report
 
-⚠️ Complaint pressure
-
-📢 Sector heat
-
-📈 7-day sentiment forecast
-
-🏷 Brand-level projections
-
-🧠 System Design
-```bash
-Data Layer
-   ↓
-NLP Layer
-   ↓
-Aggregation Layer
-   ↓
-Intelligence Layer
-   ↓
-Forecast Layer
-   ↓
-Structured Output
+```
+data/processed/market_report.txt
 ```
 
-This is a sentiment-driven market signal detection and forecasting engine.
+Includes:
+
+* market overview
+* brand dynamics
+* narrative trends
+* emerging risks
+* AI-generated strategic insights
+
+---
+
+## Example Forecast Output
+
+Trend Direction: Bearish
+Trend Slope: -0.023
+Volatility: 0.46
+Confidence Score: 0.53
+
+Forecast Horizons:
+
+* 7 Day Forecast
+* 30 Day Forecast
+* 90 Day Forecast
+
+---
+
+## Technologies Used
+
+### NLP / AI
+
+* FinBERT
+* Llama 3
+* HuggingFace Transformers
+* LangChain
+
+### Machine Learning
+
+* Random Forest Regression
+* Feature Engineering
+* Walk-forward validation
+
+### Retrieval Augmented Generation
+
+* FAISS Vector Database
+* Sentence Transformers
+* Groq API
+
+### Data Processing
+
+* Pandas
+* NumPy
+
+---
+
+## Model Evaluation
+
+Example evaluation metrics:
+
+```
+MAE: 0.42
+RMSE: 0.47
+R²: -3.25
+```
+
+Low R² occurs due to limited historical data (~14 days).
+
+With more data (40–60 days), performance improves significantly.
+
+---
+
+## Future Improvements
+
+Potential enhancements:
+
+* real-time social media sentiment analysis
+* dashboard visualization
+* alert system for market risk signals
+* automated weekly intelligence reports
+* deployment as a web API
+
+---
+
+## License
+
+This project is developed for educational and research purposes.
+
+---
+
+## Contributors
+
+Project developed as part of an AI Market Intelligence System for analyzing e-commerce sentiment and trends.
+

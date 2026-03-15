@@ -16,13 +16,21 @@ __pycache__/
 .idea/
 .vscode/
 
+# vector databases
+vector_store/
+src/rag/vector_store/
 # ---------------------------
 # Data Files (Generated)
 # ---------------------------
 data/*
+data/processed/*.txt
 
 # Keep folder structure
 !data/raw/
 !data/processed/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db

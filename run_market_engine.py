@@ -17,6 +17,9 @@ from src.analytics.topic_sentiment_matrix import run_topic_sentiment_matrix
 from src.analytics.topic_momentum_tracker import run_topic_momentum_tracker
 from src.intelligence.narrative_intelligence import run_narrative_intelligence
 from src.narrative.narrative_summary import generate_market_report
+from src.rag.build_vector_store import build_vector_store
+from src.rag.rag_engine import generate_rag_response
+from src.rag.rag_engine import generate_market_risk_signal
 
 import json
 from datetime import datetime
@@ -61,6 +64,10 @@ def main():
     print("Building master dataset...")
     build_master_dataset()
 
+    # 5️⃣.1️⃣ Build RAG Vector Store
+    print("Building vector store for RAG...")
+    build_vector_store()
+
     # 6️⃣ Trend Indexes
     print("Generating daily sentiment index...")
     run_daily_sentiment_index()
@@ -90,6 +97,19 @@ def main():
     print("Running narrative intelligence...")
     narrative_output = run_narrative_intelligence()
 
+    print("Generating AI market risk signals...")
+    market_risk_signal = generate_market_risk_signal()
+
+    # 🔮 AI Market Insight (RAG)
+    print("Generating AI market insight...")
+
+    rag_insight = generate_rag_response(
+        "What are the major current trends in the Indian e-commerce market?"
+    )
+
+    print("\nAI Market Insight:")
+    print(rag_insight)
+
     # 🔟 Forecast Engine
     print("Running market forecast...")
     market_forecast = forecast_market_sentiment()
@@ -111,7 +131,9 @@ def main():
             "topic_sentiment_matrix": topic_matrix,
             "topic_momentum": topic_momentum,
             "market_drivers": market_drivers,
-            "narrative_intelligence": narrative_output
+            "narrative_intelligence": narrative_output,
+            "rag_market_insight": rag_insight,
+            "rag_market_risk": market_risk_signal
         },
 
         "forecasting": {
@@ -135,6 +157,56 @@ def main():
     # 1️⃣3️⃣ AI Narrative Report
     print("Generating AI market report...")
     generate_market_report(BASE_DIR)
+
+    # ---------------------------------------
+    # Build dashboard-friendly output
+    # ---------------------------------------
+
+    dashboard_output = {
+
+        "timestamp": str(datetime.now()),
+
+        "market_overview": {
+            "trend_direction": market_forecast["trend_direction"],
+            "trend_slope": market_forecast["trend_slope"],
+            "current_sentiment": market_output["current_sentiment"],
+            "volatility": market_forecast["volatility"]
+        },
+
+        "brand_insights": {
+            "top_positive_brand": market_output["top_positive_brand"],
+            "top_negative_brand": market_output["top_negative_brand"],
+            "most_volatile_brand": market_output["most_volatile_brand"]
+        },
+
+        "topic_insights": {
+            "top_topics": market_output["top_topics"],
+            "fastest_rising_topic": market_output["fastest_rising_topic"],
+            "fastest_declining_topic": market_output["fastest_declining_topic"]
+        },
+
+        "forecast": {
+            "7_day": market_forecast["forecasts"]["7_day_forecast"],
+            "30_day": market_forecast["forecasts"]["30_day_forecast"],
+            "90_day": market_forecast["forecasts"]["90_day_forecast"]
+        },
+
+        "ai_insight": market_output.get("rag_market_explanation", ""),
+
+        "risk_signals": final_output["current_market_state"].get("rag_market_risk", "")
+    }
+
+    dashboard_path = os.path.join(
+        BASE_DIR,
+        "data/output/market_dashboard_data.json"
+    )
+
+    os.makedirs(os.path.dirname(dashboard_path), exist_ok=True)
+
+    with open(dashboard_path, "w") as f:
+        json.dump(dashboard_output, f, indent=4)
+
+    print("Dashboard data exported")
 
 
 if __name__ == "__main__":

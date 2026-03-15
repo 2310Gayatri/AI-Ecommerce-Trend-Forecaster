@@ -12,6 +12,7 @@ from src.utils.data_loader import (
     load_daily_metrics,
     load_brand_metrics
 )
+from src.rag.rag_engine import generate_rag_response
 
 
 def run_market_intelligence():
@@ -187,6 +188,33 @@ def run_market_intelligence():
     while the fastest declining topic is {fastest_declining_topic}.
     """
 
+    # -------------------------
+    # 🔮 7️⃣ RAG Narrative Insight
+    # -------------------------
+
+    print("Generating RAG market explanation...")
+
+    rag_query = f"""
+Explain the current Indian ecommerce market sentiment.
+
+Market Direction: {market_direction}
+Top Positive Brand: {top_positive_brand}
+Top Negative Brand: {top_negative_brand}
+Top Topics: {top_topics}
+Fastest Rising Topic: {fastest_rising_topic}
+Fastest Declining Topic: {fastest_declining_topic}
+
+Provide a concise explanation of why these trends may be happening.
+"""
+
+    rag_insight, rag_sources = generate_rag_response(rag_query)
+
+    summary += f"""
+
+    AI Narrative Explanation
+    {rag_insight}
+    """
+
     output = {
         "market_direction": market_direction,
         "market_slope": round(float(market_slope), 6),
@@ -198,7 +226,9 @@ def run_market_intelligence():
         "most_positive_topic": most_positive_topic,
         "most_negative_topic": most_negative_topic,
         "fastest_rising_topic": fastest_rising_topic,
-        "fastest_declining_topic": fastest_declining_topic
+        "fastest_declining_topic": fastest_declining_topic,
+        "rag_market_explanation": rag_insight,
+        "rag_sources": rag_sources
     }
 
     print("\n--- Human Readable Insight ---")

@@ -10,6 +10,7 @@ sys.path.append(
 )
 
 from src.utils.data_loader import load_daily_metrics, load_brand_metrics
+from src.rag.rag_engine import generate_rag_response
 
 
 BASE_DIR = os.path.abspath(
@@ -144,39 +145,18 @@ def forecast_market_sentiment():
 
     df = df.sort_values("date")
 
-    # -----------------------------
-    # Time index
-    # -----------------------------
-
     df["time_index"] = range(len(df))
-
-    # -----------------------------
-    # Lag features
-    # -----------------------------
 
     df["sentiment_lag_1"] = df["sentiment_index"].shift(1)
     df["sentiment_lag_2"] = df["sentiment_index"].shift(2)
 
     df["rolling_mean_3"] = df["sentiment_index"].rolling(3).mean()
 
-    # -----------------------------
-    # Sentiment dynamics (NEW)
-    # -----------------------------
-
     df["sentiment_momentum"] = df["sentiment_index"].diff()
-
     df["sentiment_acceleration"] = df["sentiment_momentum"].diff()
-
-    # -----------------------------
-    # Seasonality
-    # -----------------------------
 
     df["sin_week"] = np.sin(2 * np.pi * df["time_index"] / 7)
     df["cos_week"] = np.cos(2 * np.pi * df["time_index"] / 7)
-
-    # -----------------------------
-    # Topic signal engineering
-    # -----------------------------
 
     topic_cols = [
         "customer_complaints",
@@ -190,22 +170,12 @@ def forecast_market_sentiment():
         "technology"
     ]
 
-    # Ensure columns exist
     for col in topic_cols:
         if col not in df.columns:
             df[col] = 0
 
-    # -----------------------------
-    # Daily topic momentum
-    # -----------------------------
-
     momentum = df[topic_cols].diff()
-
     df["topic_momentum_score"] = momentum.abs().sum(axis=1)
-
-    # -----------------------------
-    # Topic sentiment proxy
-    # -----------------------------
 
     positive_topics = [
         "expansion",
@@ -225,10 +195,6 @@ def forecast_market_sentiment():
             - df[negative_topics].sum(axis=1)
     )
 
-    # -----------------------------
-    # Event intensity
-    # -----------------------------
-
     df["event_intensity"] = df[topic_cols].sum(axis=1)
     df = df.fillna(0)
 
@@ -236,26 +202,19 @@ def forecast_market_sentiment():
     df["topic_intensity_5"] = df["event_intensity"].rolling(5).mean()
 
     df = df.fillna(0)
-    # -----------------------------
-    # Feature set
-    # -----------------------------
 
     feature_cols = [
         "time_index",
         "sentiment_lag_1",
         "sentiment_lag_2",
         "rolling_mean_3",
-
         "sentiment_momentum",
         "sentiment_acceleration",
-
         "sin_week",
         "cos_week",
-
         "topic_momentum_score",
         "avg_topic_sentiment",
         "event_intensity",
-
         "topic_intensity_3",
         "topic_intensity_5"
     ]
@@ -263,15 +222,7 @@ def forecast_market_sentiment():
     X = df[feature_cols]
     y = df["sentiment_index"]
 
-    # -----------------------------
-    # Evaluation
-    # -----------------------------
-
     evaluation = walk_forward_validation(df, feature_cols)
-
-    # -----------------------------
-    # Train model
-    # -----------------------------
 
     model = RandomForestRegressor(
         n_estimators=200,
@@ -287,10 +238,6 @@ def forecast_market_sentiment():
 
     drivers = generate_forecast_drivers(feature_importance)
 
-    # -----------------------------
-    # Forecast generation
-    # -----------------------------
-
     last_index = df["time_index"].iloc[-1]
     last_values = df.tail(3)["sentiment_index"].tolist()
 
@@ -299,7 +246,6 @@ def forecast_market_sentiment():
         preds = []
 
         current_index = last_index + 1
-
         values = last_values.copy()
 
         for i in range(days):
@@ -332,11 +278,9 @@ def forecast_market_sentiment():
             }])
 
             pred = model.predict(features)[0]
-
             pred = max(-1, min(1, pred))
 
             preds.append(round(float(pred), 4))
-
             values.append(pred)
 
             current_index += 1
@@ -358,8 +302,20 @@ def forecast_market_sentiment():
         trend = "Bearish"
 
     volatility = float(np.std(y))
-
     confidence = max(0.1, 1 - volatility)
+
+    # 🔮 RAG FORECAST EXPLANATION
+    rag_query = f"""
+Explain the predicted ecommerce market sentiment trend.
+
+Trend Direction: {trend}
+Market Volatility: {round(volatility,4)}
+Key Forecast Drivers: {drivers}
+
+Provide a short explanation of why the forecast may be occurring based on recent ecommerce news.
+"""
+
+    rag_forecast_explanation, rag_sources = generate_rag_response(rag_query)
 
     return {
 
@@ -380,12 +336,16 @@ def forecast_market_sentiment():
 
         "forecast_drivers": drivers,
 
+        "rag_forecast_explanation": rag_forecast_explanation,
+        "rag_forecast_sources": rag_sources,
+
         "forecasts": {
             "7_day_forecast": forecast_7,
             "30_day_forecast": forecast_30,
             "90_day_forecast": forecast_90
         }
     }
+
 def forecast_brand_sentiment():
 
     df = load_brand_metrics()

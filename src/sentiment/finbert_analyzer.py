@@ -22,17 +22,28 @@ def run_finbert():
 
     model_name = "ProsusAI/finbert"
 
+    print("Loading FinBERT model...")
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
     model.eval()
 
+    device = torch.device("cpu")
+    model.to(device)
+
     texts = df["Cleaned_Text"].astype(str).tolist()
 
-    batch_size = 16
+    # truncate extremely long texts to reduce memory usage
+    texts = [text[:500] for text in texts]
+
+    # safe batch size for 16GB RAM
+    batch_size = 8
 
     labels = []
     confidences = []
+
+    print(f"Processing {len(texts)} articles in batches of {batch_size}...")
 
     for i in range(0, len(texts), batch_size):
 
@@ -43,8 +54,8 @@ def run_finbert():
             return_tensors="pt",
             truncation=True,
             padding=True,
-            max_length=512
-        )
+            max_length=256
+        ).to(device)
 
         with torch.no_grad():
             outputs = model(**inputs)
@@ -55,10 +66,15 @@ def run_finbert():
 
         for conf, pred in zip(batch_conf, batch_pred):
 
-            label = model.config.id2label[pred.item()]
+            label = model.config.id2label[pred.item()].lower()
 
             labels.append(label)
             confidences.append(float(conf.item()))
+
+        # free memory immediately
+        del inputs
+        del outputs
+        torch.cuda.empty_cache()
 
     df["finbert_label"] = labels
     df["finbert_confidence"] = confidences

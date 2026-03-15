@@ -1,5 +1,10 @@
 import json
 import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
+from src.rag.rag_engine import generate_rag_response
 
 
 def generate_market_report(base_dir):
@@ -22,6 +27,13 @@ def generate_market_report(base_dir):
         data = json.load(f)
 
     market = data["current_market_state"]["market_signals"]
+
+    # 🔮 Generate AI insight using RAG
+    print("Generating RAG-based market insight...")
+
+    rag_query = "Summarize the current consumer sentiment and trends in the Indian e-commerce market."
+
+    rag_insight, rag_sources = generate_rag_response(rag_query)
 
     report = f"""
 Ecommerce Market Intelligence Report
@@ -49,6 +61,15 @@ Emerging Narratives
 Fastest rising topic: {market["fastest_rising_topic"]}
 
 Fastest declining topic: {market["fastest_declining_topic"]}
+
+
+AI Market Insight (RAG Analysis)
+--------------------------------
+{rag_insight}
+
+Risk Signals
+------------
+{data["current_market_state"]["rag_market_risk"]}
 """
 
     with open(output_path, "w") as f:
