@@ -1,0 +1,458 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import sys
+import os
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+)
+
+from src.utils.data_loader import load_daily_metrics, load_brand_metrics
+
+
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")
+)
+
+
+# ------------------------------------------------
+# Load intelligence signals
+# ------------------------------------------------
+
+def load_intelligence_signals():
+
+    signals = {}
+
+    try:
+        topic_momentum = pd.read_csv(
+            os.path.join(BASE_DIR, "data/processed/topic_momentum.csv")
+        )
+        signals["topic_momentum"] = topic_momentum
+    except:
+        signals["topic_momentum"] = None
+
+    try:
+        topic_sentiment = pd.read_csv(
+            os.path.join(BASE_DIR, "data/processed/topic_sentiment_matrix.csv")
+        )
+        signals["topic_sentiment"] = topic_sentiment
+    except:
+        signals["topic_sentiment"] = None
+
+    try:
+        event_signals = pd.read_json(
+            os.path.join(BASE_DIR, "data/processed/event_signals.json")
+        )
+        signals["event_signals"] = event_signals
+    except:
+        signals["event_signals"] = None
+
+    return signals
+
+
+# ------------------------------------------------
+# Evaluation
+# ------------------------------------------------
+
+def evaluate_model(y_true, y_pred):
+
+    mae = mean_absolute_error(y_true, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+    r2 = r2_score(y_true, y_pred)
+
+    return {
+        "MAE": round(float(mae), 4),
+        "RMSE": round(float(rmse), 4),
+        "R2": round(float(r2), 4)
+    }
+
+
+# ------------------------------------------------
+# Walk-forward validation
+# ------------------------------------------------
+
+def walk_forward_validation(df, feature_cols):
+
+    preds = []
+    actuals = []
+
+    for i in range(6, len(df) - 1):
+
+        train = df.iloc[:i]
+        test = df.iloc[i:i+1]
+
+        X_train = train[feature_cols]
+        y_train = train["sentiment_index"]
+
+        X_test = test[feature_cols]
+        y_test = test["sentiment_index"]
+
+        model = RandomForestRegressor(
+            n_estimators=200,
+            max_depth=6,
+            random_state=42
+        )
+
+        model.fit(X_train, y_train)
+
+        pred = model.predict(X_test)[0]
+
+        preds.append(pred)
+        actuals.append(y_test.values[0])
+
+    return evaluate_model(actuals, preds)
+
+
+# ------------------------------------------------
+# Forecast Driver Generator
+# ------------------------------------------------
+
+def generate_forecast_drivers(feature_importance):
+
+    sorted_features = sorted(
+        feature_importance.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    drivers = []
+
+    for feature, score in sorted_features[:3]:
+
+        readable = feature.replace("_", " ")
+
+        drivers.append({
+            "driver": readable,
+            "importance": round(float(score), 3)
+        })
+
+    return drivers
+
+
+# ------------------------------------------------
+# Market Forecast
+# ------------------------------------------------
+
+def forecast_market_sentiment():
+
+    df = load_daily_metrics()
+
+    if df.empty or len(df) < 10:
+        return {"error": "Not enough data for forecasting"}
+
+    df = df.sort_values("date")
+
+    # -----------------------------
+    # Time index
+    # -----------------------------
+
+    df["time_index"] = range(len(df))
+
+    # -----------------------------
+    # Lag features
+    # -----------------------------
+
+    df["sentiment_lag_1"] = df["sentiment_index"].shift(1)
+    df["sentiment_lag_2"] = df["sentiment_index"].shift(2)
+
+    df["rolling_mean_3"] = df["sentiment_index"].rolling(3).mean()
+
+    # -----------------------------
+    # Sentiment dynamics (NEW)
+    # -----------------------------
+
+    df["sentiment_momentum"] = df["sentiment_index"].diff()
+
+    df["sentiment_acceleration"] = df["sentiment_momentum"].diff()
+
+    # -----------------------------
+    # Seasonality
+    # -----------------------------
+
+    df["sin_week"] = np.sin(2 * np.pi * df["time_index"] / 7)
+    df["cos_week"] = np.cos(2 * np.pi * df["time_index"] / 7)
+
+    # -----------------------------
+    # Topic signal engineering
+    # -----------------------------
+
+    topic_cols = [
+        "customer_complaints",
+        "discounts",
+        "expansion",
+        "funding",
+        "logistics",
+        "other",
+        "partnership",
+        "regulations",
+        "technology"
+    ]
+
+    # Ensure columns exist
+    for col in topic_cols:
+        if col not in df.columns:
+            df[col] = 0
+
+    # -----------------------------
+    # Daily topic momentum
+    # -----------------------------
+
+    momentum = df[topic_cols].diff()
+
+    df["topic_momentum_score"] = momentum.abs().sum(axis=1)
+
+    # -----------------------------
+    # Topic sentiment proxy
+    # -----------------------------
+
+    positive_topics = [
+        "expansion",
+        "funding",
+        "technology",
+        "partnership"
+    ]
+
+    negative_topics = [
+        "customer_complaints",
+        "logistics",
+        "regulations"
+    ]
+
+    df["avg_topic_sentiment"] = (
+            df[positive_topics].sum(axis=1)
+            - df[negative_topics].sum(axis=1)
+    )
+
+    # -----------------------------
+    # Event intensity
+    # -----------------------------
+
+    df["event_intensity"] = df[topic_cols].sum(axis=1)
+    df = df.fillna(0)
+
+    df["topic_intensity_3"] = df["event_intensity"].rolling(3).mean()
+    df["topic_intensity_5"] = df["event_intensity"].rolling(5).mean()
+
+    df = df.fillna(0)
+    # -----------------------------
+    # Feature set
+    # -----------------------------
+
+    feature_cols = [
+        "time_index",
+        "sentiment_lag_1",
+        "sentiment_lag_2",
+        "rolling_mean_3",
+
+        "sentiment_momentum",
+        "sentiment_acceleration",
+
+        "sin_week",
+        "cos_week",
+
+        "topic_momentum_score",
+        "avg_topic_sentiment",
+        "event_intensity",
+
+        "topic_intensity_3",
+        "topic_intensity_5"
+    ]
+
+    X = df[feature_cols]
+    y = df["sentiment_index"]
+
+    # -----------------------------
+    # Evaluation
+    # -----------------------------
+
+    evaluation = walk_forward_validation(df, feature_cols)
+
+    # -----------------------------
+    # Train model
+    # -----------------------------
+
+    model = RandomForestRegressor(
+        n_estimators=200,
+        max_depth=6,
+        random_state=42
+    )
+
+    model.fit(X, y)
+
+    feature_importance = dict(
+        zip(feature_cols, model.feature_importances_)
+    )
+
+    drivers = generate_forecast_drivers(feature_importance)
+
+    # -----------------------------
+    # Forecast generation
+    # -----------------------------
+
+    last_index = df["time_index"].iloc[-1]
+    last_values = df.tail(3)["sentiment_index"].tolist()
+
+    def generate_forecast(days):
+
+        preds = []
+
+        current_index = last_index + 1
+
+        values = last_values.copy()
+
+        for i in range(days):
+
+            lag1 = values[-1]
+            lag2 = values[-2]
+
+            rolling = np.mean(values[-3:])
+
+            sin_week = np.sin(2 * np.pi * current_index / 7)
+            cos_week = np.cos(2 * np.pi * current_index / 7)
+
+            momentum = lag1 - lag2
+            acceleration = momentum - (values[-2] - values[-3]) if len(values) >= 3 else 0
+
+            features = pd.DataFrame([{
+                "time_index": current_index,
+                "sentiment_lag_1": lag1,
+                "sentiment_lag_2": lag2,
+                "rolling_mean_3": rolling,
+                "sentiment_momentum": momentum,
+                "sentiment_acceleration": acceleration,
+                "sin_week": sin_week,
+                "cos_week": cos_week,
+                "topic_momentum_score": df["topic_momentum_score"].tail(3).mean(),
+                "avg_topic_sentiment": df["avg_topic_sentiment"].tail(3).mean(),
+                "event_intensity": df["event_intensity"].tail(3).mean(),
+                "topic_intensity_3": df["topic_intensity_3"].tail(3).mean(),
+                "topic_intensity_5": df["topic_intensity_5"].tail(3).mean()
+            }])
+
+            pred = model.predict(features)[0]
+
+            pred = max(-1, min(1, pred))
+
+            preds.append(round(float(pred), 4))
+
+            values.append(pred)
+
+            current_index += 1
+
+        return preds
+
+
+    forecast_7 = generate_forecast(7)
+    forecast_30 = generate_forecast(30)
+    forecast_90 = generate_forecast(90)
+
+    slope = np.polyfit(df["time_index"], df["sentiment_index"], 1)[0]
+
+    trend = "Stable"
+
+    if slope > 0.01:
+        trend = "Bullish"
+    elif slope < -0.01:
+        trend = "Bearish"
+
+    volatility = float(np.std(y))
+
+    confidence = max(0.1, 1 - volatility)
+
+    return {
+
+        "trend_direction": trend,
+
+        "trend_slope": round(float(slope), 4),
+
+        "volatility": round(volatility, 4),
+
+        "confidence_score": round(confidence, 3),
+
+        "evaluation": evaluation,
+
+        "feature_importance": {
+            k: round(float(v), 3)
+            for k, v in feature_importance.items()
+        },
+
+        "forecast_drivers": drivers,
+
+        "forecasts": {
+            "7_day_forecast": forecast_7,
+            "30_day_forecast": forecast_30,
+            "90_day_forecast": forecast_90
+        }
+    }
+def forecast_brand_sentiment():
+
+    df = load_brand_metrics()
+
+    if df.empty:
+        return {"error": "No brand data"}
+
+    df = df.sort_values("date")
+
+    results = []
+
+    for brand in df["Brand"].unique():
+
+        brand_df = df[df["Brand"] == brand].copy()
+
+        if len(brand_df) < 5:
+            continue
+
+        brand_df["time_index"] = range(len(brand_df))
+
+        X = brand_df[["time_index"]]
+        y = brand_df["sentiment_index"]
+
+        model = RandomForestRegressor(
+            n_estimators=200,
+            max_depth=6,
+            random_state=42
+        )
+
+        model.fit(X, y)
+
+        def generate(days):
+
+            future = pd.DataFrame({
+                "time_index": range(len(brand_df), len(brand_df) + days)
+            })
+
+            preds = model.predict(future)
+
+            preds = [max(-1, min(1, p)) for p in preds]
+
+            return [round(float(p), 4) for p in preds]
+
+        slope = np.polyfit(
+            brand_df["time_index"],
+            brand_df["sentiment_index"],
+            1
+        )[0]
+
+        if slope > 0.01:
+            direction = "Improving"
+        elif slope < -0.01:
+            direction = "Declining"
+        else:
+            direction = "Stable"
+
+        results.append({
+            "brand": brand,
+            "trend_direction": direction,
+            "trend_slope": round(float(slope), 4),
+            "forecasts": {
+                "7_day": generate(7),
+                "30_day": generate(30),
+                "90_day": generate(90)
+            }
+        })
+
+    return {
+        "brand_forecasts": results
+    }

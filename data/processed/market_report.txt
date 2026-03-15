@@ -1,0 +1,26 @@
+
+Ecommerce Market Intelligence Report
+------------------------------------
+
+Market Overview
+The ecommerce market currently shows a bearish sentiment trend
+with a slope of -0.019908.
+
+Current sentiment stands at 0.0.
+
+Brand Dynamics
+Snapdeal shows the strongest positive momentum,
+while Reliance Digital is experiencing the sharpest decline.
+
+Snapdeal currently has the highest volatility.
+
+Narrative Trends
+Top topics today include: technology, other, customer_complaints.
+
+The most positive topic is funding,
+while the most negative topic is logistics.
+
+Emerging Narratives
+Fastest rising topic: customer_complaints
+
+Fastest declining topic: technology

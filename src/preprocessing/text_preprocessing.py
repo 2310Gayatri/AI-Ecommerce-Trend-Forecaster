@@ -47,8 +47,11 @@ def preprocess_news_data():
     os.makedirs(processed_dir, exist_ok=True)
 
     # Load raw dataset
-    df = pd.read_csv(raw_path)
+    if os.path.getsize(raw_path) == 0:
+        print("Raw news file is empty. Skipping preprocessing.")
+        return
 
+    df = pd.read_csv(raw_path)
     # Combine title and description
     df["combined_text"] = df["title"].fillna("") + " " + df["description"].fillna("")
 

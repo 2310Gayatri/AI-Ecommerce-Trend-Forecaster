@@ -21,7 +21,7 @@ def generate_market_report(base_dir):
     with open(signal_path, "r") as f:
         data = json.load(f)
 
-    market = data["market_signals"]
+    market = data["current_market_state"]["market_signals"]
 
     report = f"""
 Ecommerce Market Intelligence Report

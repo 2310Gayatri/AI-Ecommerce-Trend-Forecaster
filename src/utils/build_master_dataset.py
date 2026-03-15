@@ -23,6 +23,17 @@ def build_master_dataset():
     master_df["topic"] = topic_df["topic"]
     master_df["topic_confidence"] = topic_df["topic_confidence"]
 
+    # ADD THIS BLOCK HERE:
+    SENTIMENT_MAP = {
+        "positive": 1,
+        "neutral": 0,
+        "negative": -1
+    }
+    master_df["sentiment_score"] = master_df["finbert_label"].str.lower().map(SENTIMENT_MAP)
+
+    # Optional: weighted sentiment
+    master_df["weighted_sentiment"] = master_df["sentiment_score"] * master_df["finbert_confidence"]
+
     output_path = os.path.join(BASE_DIR, "data", "processed", "news_master_dataset.csv")
 
     master_df.to_csv(output_path, index=False)

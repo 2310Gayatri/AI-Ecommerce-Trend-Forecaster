@@ -96,13 +96,13 @@ def run_market_intelligence():
     daily_df["time_index"] = range(len(daily_df))
 
     X = daily_df[["time_index"]]
-    y = daily_df["sentiment_score"]
+    y = daily_df["sentiment_index"]
 
     model = LinearRegression()
     model.fit(X, y)
 
     market_slope = model.coef_[0]
-    current_sentiment = daily_df["sentiment_score"].iloc[-1]
+    current_sentiment = daily_df["sentiment_index"].iloc[-1]
 
     if market_slope > 0:
         market_direction = "Bullish"
@@ -129,7 +129,7 @@ def run_market_intelligence():
         temp["time_index"] = range(len(temp))
 
         Xb = temp[["time_index"]]
-        yb = temp["sentiment_score"]
+        yb = temp["sentiment_index"]
 
         model = LinearRegression()
         model.fit(Xb, yb)
@@ -156,7 +156,7 @@ def run_market_intelligence():
         if len(temp) < 2:
             continue
 
-        volatility = temp["sentiment_score"].std()
+        volatility = temp["sentiment_index"].std()
         volatility_results.append((brand, volatility))
 
     volatility_results = sorted(volatility_results, key=lambda x: x[1], reverse=True)

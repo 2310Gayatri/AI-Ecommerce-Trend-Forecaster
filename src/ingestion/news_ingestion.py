@@ -8,12 +8,19 @@ BASE_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..")
 )
 
+
+# ------------------------------------------------
+# Fetch News
+# ------------------------------------------------
+
 def fetch_news_for_brands(brands, page_size=10):
+
     all_news = []
 
     url = "https://newsapi.org/v2/everything"
 
     for brand in brands:
+
         print(f"Fetching news for {brand}...")
 
         params = {
@@ -24,42 +31,83 @@ def fetch_news_for_brands(brands, page_size=10):
             "pageSize": page_size
         }
 
-        response = requests.get(url, params=params)
+        try:
 
-        if response.status_code != 200:
-            print(f"Error fetching data for {brand}: {response.status_code}")
-            continue
+            response = requests.get(url, params=params)
 
-        data = response.json()
-        articles = data.get("articles", [])
+            if response.status_code != 200:
+                print(f"API Error for {brand}: {response.status_code}")
+                continue
 
-        for article in articles:
-            all_news.append({
-                "brand": brand,
-                "source": article["source"]["name"],
-                "title": article["title"],
-                "description": article["description"],
-                "content": article["content"],
-                "published_at": article["publishedAt"],
-                "fetched_at": datetime.now()
-            })
+            data = response.json()
+
+            articles = data.get("articles", [])
+
+            print(f"{brand}: {len(articles)} articles")
+
+            for article in articles:
+
+                all_news.append({
+
+                    "brand": brand,
+
+                    "source": article.get("source", {}).get("name"),
+
+                    "title": article.get("title"),
+
+                    "description": article.get("description"),
+
+                    "content": article.get("content"),
+
+                    "published_at": article.get("publishedAt"),
+
+                    "fetched_at": datetime.now()
+
+                })
+
+        except Exception as e:
+
+            print(f"Error fetching {brand}: {e}")
+
+    print("\nTotal Articles fetched:", len(all_news))
+
+    if len(all_news) == 0:
+        print("Warning: No news articles were collected.")
 
     df = pd.DataFrame(all_news)
+
     return df
 
 
+# ------------------------------------------------
+# Save CSV
+# ------------------------------------------------
+
 def save_news_to_csv(df):
-    # Use the already defined BASE_DIR
+
     save_dir = os.path.join(BASE_DIR, "data", "raw")
+
     os.makedirs(save_dir, exist_ok=True)
 
     file_path = os.path.join(save_dir, "news_data.csv")
 
+    if df is None or df.empty:
+        print("No data to save. Skipping CSV creation.")
+        return
+
     df.to_csv(file_path, index=False)
+
     print(f"\nNews data saved to: {file_path}")
 
+    print(f"Rows saved: {len(df)}")
+
+
+# ------------------------------------------------
+# Run Script
+# ------------------------------------------------
 
 if __name__ == "__main__":
+
     print("Starting multi-brand news ingestion...\n")
 
     brands = ECOMMERCE_BRANDS
@@ -67,8 +115,13 @@ if __name__ == "__main__":
     df = fetch_news_for_brands(brands, page_size=10)
 
     if df is not None and not df.empty:
+
         save_news_to_csv(df)
+
         print("\nSample Data:\n")
+
         print(df.head())
+
     else:
-        print("No data fetched.")
+
+        print("No data fetched from NewsAPI.")
