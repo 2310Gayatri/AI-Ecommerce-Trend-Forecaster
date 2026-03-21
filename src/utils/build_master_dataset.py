@@ -55,7 +55,17 @@ def build_master_dataset():
         "Brand": "brand"
     })
 
-    master_df['date'] = pd.to_datetime(master_df['date']).dt.date
+    master_df['date'] = pd.to_datetime(
+        master_df['date'],
+        errors='coerce',
+        utc=True  # 🔥 important fix
+    )
+
+    # drop bad rows
+    master_df = master_df.dropna(subset=['date'])
+
+    # convert safely
+    master_df['date'] = master_df['date'].dt.tz_localize(None).dt.date
     master_df['brand'] = master_df['brand'].str.strip().str.lower()
     master_df = master_df.sort_values(["brand", "date"])
     master_df.columns = master_df.columns.str.lower()

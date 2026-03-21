@@ -1,29 +1,44 @@
 {
-    "timestamp": "2026-03-21 10:36:35.902474",
+    "timestamp": "2026-03-21 17:19:19.272205",
     "current_market_state": {
         "market_signals": {
             "market_direction": "Bearish",
-            "market_slope": -0.014935,
-            "current_sentiment": 0.335664,
+            "market_slope": -0.014318,
+            "current_sentiment": 0.339085,
             "top_positive_brand": "meesho",
             "top_negative_brand": "nykaa",
             "most_volatile_brand": "nykaa",
             "top_topics": [
+                "technology",
                 "funding",
-                "discounts",
-                "technology"
+                "other"
             ],
-            "most_positive_topic": "funding",
+            "most_positive_topic": "expansion",
             "most_negative_topic": "logistics",
             "fastest_rising_topic": "funding",
             "fastest_declining_topic": "other",
-            "rag_market_explanation": "Here's the analysis of the current Indian ecommerce market sentiment:\n\n**1. Key Market Signals**\nThe main signals emerging from the news are: \n- Geopolitical tensions affecting IPO timelines\n- Startups relocating headquarters to India\n- Consumers preferring experiential spending\n- Inventory pressure and Gulf war concerns leading to festival discounts\n- AI disruption in D2C startups\n\n**2. Brand Impact**\nThe most affected brands are:\n- Flipkart (negative sentiment due to customer complaints and discounts)\n- Nykaa (positive sentiment due to experiential marketing, but ironically listed as Top Negative Brand)\n- Meesho (neutral sentiment due to funding, listed as Top Positive Brand)\n- Myntra (neutral sentiment due to technology)\n\n**3. Consumer Sentiment Drivers**\nThe sentiment is bearish due to:\n- Geopolitical tensions and concerns over the Gulf war\n- Inventory pressure and discounts, indicating a slowdown in sales\n- Consumers prioritizing experiential spending over products, which may impact ecommerce sales\n- AI disruption, which may challenge traditional ecommerce models\n\n**4. Strategic Insight**\nFor market observers, a key strategic takeaway is to monitor the impact of geopolitical tensions and AI disruption on consumer spending habits and ecommerce business models, as these factors may continue to drive the bearish market sentiment.",
+            "rag_market_explanation": "* Key Market Signals\n  * Indian retailers are slashing prices due to inventory pressure and Gulf war concerns (Source 1)\n  * Geopolitical tensions are delaying IPO timelines (Source 2)\n  * AI is disrupting D2C startups and challenging traditional e-commerce models (Source 4)\n  * Venture investing is expecting a correction in the AI boom (Source 5)\n\n* Brand Impact\n  * Flipkart is experiencing negative sentiment due to discounts and customer complaints (Source 1, Source 2)\n  * Reliance Digital has a neutral sentiment with no specific news about its performance (Source 3)\n  * Myntra is associated with the topic of technology, specifically AI in D2C startups (Source 4)\n  * Meesho is mentioned in the context of funding and venture investing (Source 5)\n\n* Consumer Sentiment Drivers\n  * Negative sentiment is linked to concerns over the Gulf war and inventory pressure, leading to cautious consumer behavior (Source 1)\n  * Customer complaints are also driving negative sentiment, specifically for Flipkart (Source 2)\n\n* Strategic Insight\n  * Ecommerce companies should focus on adapting to the changing technological landscape, such as AI disruption, to stay competitive in the market.",
             "rag_sources": [
-                "\nBrand: flipkart\nTopic: customer_complaints\nSentiment: negative\nNews: War slows IPOs, but startups keep bringing headquarters home Though geopolitical tensions are delaying IPO timelines, India\u2019s tech",
-                "\nBrand: nykaa\nTopic: other\nSentiment: positive\nNews: India\u2019s Rs 13,000 crore live events market fuelling experiential marketing push: BookMyShow\u2013EY report India live events: The report, titled Beyond ",
-                "\nBrand: flipkart\nTopic: discounts\nSentiment: negative\nNews: Retailers roll out festival discounts amid inventory pressure, Gulf war concerns As concerns over the Gulf war loom large, Indian retailers ",
-                "\nBrand: meesho\nTopic: funding\nSentiment: neutral\nNews: Exclusive: AI boom due for correction, strongest firms will endure: First Round Capital cofounder Howard Morgan In venture investing there are tw",
-                "\nBrand: myntra\nTopic: technology\nSentiment: neutral\nNews: The AI tsunami that is engulfing D2C startups Explore how AI is disrupting D2C startups by transforming search behavior and challenging tradit"
+                {
+                    "source_id": 1,
+                    "content": "\nBrand: flipkart\nTopic: discounts\nSentiment: negative\nNews: Retailers roll out festival discounts amid inventory pressure, Gulf war concerns As concerns over the Gulf war loom large, Indian retailers "
+                },
+                {
+                    "source_id": 2,
+                    "content": "\nBrand: flipkart\nTopic: customer_complaints\nSentiment: negative\nNews: War slows IPOs, but startups keep bringing headquarters home Though geopolitical tensions are delaying IPO timelines, India\u2019s tech"
+                },
+                {
+                    "source_id": 3,
+                    "content": "\nBrand: reliance digital\nTopic: other\nSentiment: neutral\nNews: Bitcoin Beyond the Halving: Why CoinEx Sees a More Selective, Institutional Crypto Cycle Ahead HONG KONG, March 20, 2026 (GLOBE NEWSWIRE)"
+                },
+                {
+                    "source_id": 4,
+                    "content": "\nBrand: myntra\nTopic: technology\nSentiment: neutral\nNews: The AI tsunami that is engulfing D2C startups Explore how AI is disrupting D2C startups by transforming search behavior and challenging tradit"
+                },
+                {
+                    "source_id": 5,
+                    "content": "\nBrand: meesho\nTopic: funding\nSentiment: neutral\nNews: Exclusive: AI boom due for correction, strongest firms will endure: First Round Capital cofounder Howard Morgan In venture investing there are tw"
+                }
             ]
         },
         "event_signals": {
@@ -31,18 +46,13 @@
             "competition_ratio": 0.0,
             "complaint_pressure": "Low",
             "complaint_ratio": 0.0,
-            "sector_heat": "Stable",
-            "heat_ratio": 1.08,
+            "sector_heat": "High Narrative Heat",
+            "heat_ratio": 2.69,
             "competition_brands": [],
             "complaint_brands": []
         },
         "topic_sentiment_matrix": {
             "topic_sentiment_matrix": [
-                {
-                    "topic": "funding",
-                    "article_volume": 8,
-                    "avg_sentiment": 0.375
-                },
                 {
                     "topic": "expansion",
                     "article_volume": 3,
@@ -50,12 +60,17 @@
                 },
                 {
                     "topic": "other",
-                    "article_volume": 10,
-                    "avg_sentiment": 0.3
+                    "article_volume": 13,
+                    "avg_sentiment": 0.231
                 },
                 {
-                    "topic": "competition",
-                    "article_volume": 1,
+                    "topic": "funding",
+                    "article_volume": 12,
+                    "avg_sentiment": 0.083
+                },
+                {
+                    "topic": "discounts",
+                    "article_volume": 14,
                     "avg_sentiment": 0.0
                 },
                 {
@@ -64,14 +79,9 @@
                     "avg_sentiment": 0.0
                 },
                 {
-                    "topic": "discounts",
-                    "article_volume": 13,
-                    "avg_sentiment": -0.077
-                },
-                {
                     "topic": "technology",
-                    "article_volume": 11,
-                    "avg_sentiment": -0.182
+                    "article_volume": 17,
+                    "avg_sentiment": -0.059
                 },
                 {
                     "topic": "customer_complaints",
@@ -89,28 +99,28 @@
             "top_rising_topics": [
                 {
                     "topic": "funding",
-                    "momentum": 1
+                    "momentum": 4
                 },
                 {
-                    "topic": "competition",
-                    "momentum": 0
+                    "topic": "technology",
+                    "momentum": 2
                 },
                 {
-                    "topic": "expansion",
+                    "topic": "discounts",
                     "momentum": 0
                 }
             ],
             "top_declining_topics": [
                 {
                     "topic": "other",
-                    "momentum": -6
-                },
-                {
-                    "topic": "technology",
-                    "momentum": -6
+                    "momentum": -3
                 },
                 {
                     "topic": "customer_complaints",
+                    "momentum": -1
+                },
+                {
+                    "topic": "partnership",
                     "momentum": -1
                 }
             ]
@@ -118,41 +128,33 @@
         "market_drivers": {
             "drivers": [
                 {
-                    "topic_group": "Pricing Strategy",
-                    "change": "1",
-                    "pct_change": 100
-                },
-                {
                     "topic_group": "Innovation",
-                    "change": "-1",
-                    "pct_change": -100.0
+                    "change": "0",
+                    "pct_change": 0.0
                 }
             ]
         },
         "narrative_intelligence": {
             "narrative_attribution": {
-                "technology": [
-                    "reliance digital",
-                    "flipkart"
-                ],
-                "discounts": [
-                    "bigbasket",
-                    "amazon india"
-                ],
                 "other": [
                     "reliance digital",
-                    "ajio"
+                    "amazon india"
                 ],
-                "funding": [
-                    "meesho",
+                "technology": [
+                    "amazon india",
                     "reliance digital"
                 ],
-                "competition": [
-                    "nykaa"
+                "discounts": [
+                    "amazon india",
+                    "bigbasket"
+                ],
+                "funding": [
+                    "reliance digital",
+                    "meesho"
                 ],
                 "expansion": [
-                    "snapdeal",
-                    "myntra"
+                    "myntra",
+                    "ajio"
                 ],
                 "customer_complaints": [
                     "flipkart"
@@ -166,11 +168,6 @@
             },
             "topic_brand_sentiment_matrix": [
                 {
-                    "topic": "competition",
-                    "brand": "nykaa",
-                    "avg_sentiment": 0.0
-                },
-                {
                     "topic": "customer_complaints",
                     "brand": "flipkart",
                     "avg_sentiment": -1.0
@@ -178,7 +175,7 @@
                 {
                     "topic": "discounts",
                     "brand": "amazon india",
-                    "avg_sentiment": 0.0
+                    "avg_sentiment": 0.25
                 },
                 {
                     "topic": "discounts",
@@ -232,6 +229,11 @@
                 },
                 {
                     "topic": "funding",
+                    "brand": "flipkart",
+                    "avg_sentiment": -1.0
+                },
+                {
+                    "topic": "funding",
                     "brand": "meesho",
                     "avg_sentiment": 0.5
                 },
@@ -293,12 +295,12 @@
                 {
                     "topic": "technology",
                     "brand": "amazon india",
-                    "avg_sentiment": 0.0
+                    "avg_sentiment": -0.167
                 },
                 {
                     "topic": "technology",
                     "brand": "flipkart",
-                    "avg_sentiment": -0.5
+                    "avg_sentiment": 0.0
                 },
                 {
                     "topic": "technology",
@@ -313,7 +315,7 @@
                 {
                     "topic": "technology",
                     "brand": "reliance digital",
-                    "avg_sentiment": -0.2
+                    "avg_sentiment": 0.0
                 }
             ],
             "narrative_risks": [
@@ -333,61 +335,55 @@
                 },
                 {
                     "topic": "technology",
-                    "avg_sentiment": -0.182,
+                    "avg_sentiment": -0.059,
                     "affected_brands": [
-                        "reliance digital",
                         "amazon india",
+                        "reliance digital",
                         "flipkart"
                     ]
                 }
             ],
             "topic_impact_scores": [
                 {
-                    "topic": "funding",
-                    "avg_sentiment": 0.375,
-                    "volume": 8,
-                    "impact_score": 0.061
-                },
-                {
                     "topic": "other",
-                    "avg_sentiment": 0.3,
-                    "volume": 10,
-                    "impact_score": 0.061
-                },
-                {
-                    "topic": "technology",
-                    "avg_sentiment": -0.182,
-                    "volume": 11,
-                    "impact_score": 0.041
+                    "avg_sentiment": 0.231,
+                    "volume": 13,
+                    "impact_score": 0.048
                 },
                 {
                     "topic": "customer_complaints",
                     "avg_sentiment": -1.0,
                     "volume": 1,
-                    "impact_score": 0.02
-                },
-                {
-                    "topic": "discounts",
-                    "avg_sentiment": -0.077,
-                    "volume": 13,
-                    "impact_score": 0.02
+                    "impact_score": 0.016
                 },
                 {
                     "topic": "expansion",
                     "avg_sentiment": 0.333,
                     "volume": 3,
-                    "impact_score": 0.02
+                    "impact_score": 0.016
+                },
+                {
+                    "topic": "funding",
+                    "avg_sentiment": 0.083,
+                    "volume": 12,
+                    "impact_score": 0.016
                 },
                 {
                     "topic": "logistics",
                     "avg_sentiment": -1.0,
                     "volume": 1,
-                    "impact_score": 0.02
+                    "impact_score": 0.016
                 },
                 {
-                    "topic": "competition",
+                    "topic": "technology",
+                    "avg_sentiment": -0.059,
+                    "volume": 17,
+                    "impact_score": 0.016
+                },
+                {
+                    "topic": "discounts",
                     "avg_sentiment": 0.0,
-                    "volume": 1,
+                    "volume": 14,
                     "impact_score": 0.0
                 },
                 {
@@ -398,44 +394,35 @@
                 }
             ]
         },
-        "rag_market_insight": [
-            "Here's the analysis of the Indian e-commerce market trends based on the provided news context:\n\n**1. Key Market Signals**\nThe main signals emerging from the news are:\n- The semiconductor industry seeking support to grow India's chip ecosystem, indicating a push for technological advancement.\n- Retailers, including e-commerce companies, offering discounts due to inventory pressure and external concerns like the Gulf war.\n- The impact of AI on Direct-to-Consumer (D2C) startups and traditional e-commerce models.\n- A shift towards experiential marketing and consumption, with a preference for spending on experiences over products.\n- Growth concerns and competition in the e-commerce sector.\n\n**2. Brand Impact**\nThe e-commerce brands most affected by these trends are:\n- Amazon India, which could benefit from the growth of India's chip ecosystem and technological advancements.\n- Flipkart, which is impacted by the need to offer discounts due to inventory pressure, affecting its margins.\n- Myntra, which needs to adapt to the AI-driven changes in consumer search behavior and e-commerce models.\n- Nykaa, which has both positive and neutral news; it can leverage the trend of experiential marketing but faces growth concerns and competition.\n\n**3. Consumer Sentiment Drivers**\nThe sentiment drivers are:\n- Negative sentiment for Flipkart due to the necessity of offering discounts, which may indicate poor sales performance.\n- Neutral sentiment for Amazon India, Myntra, and Nykaa, as they are either adapting to technological changes or facing growth concerns without a significant negative impact on consumer perception.\n- Positive sentiment for Nykaa in the context of experiential marketing, as it reflects a broader shift towards experiences that could benefit the brand.\n\n**4. Strategic Insight**\nA concise strategic takeaway for market observers is: **Invest in AI adaptation and experiential marketing strategies**. This is because the trends indicate a significant shift towards AI-driven consumer behavior and a preference for experiential spending, which e-commerce companies must adapt to in order to remain competitive in the Indian market.",
-            [
-                "\nBrand: amazon india\nTopic: technology\nSentiment: neutral\nNews: Semicon firms seek sops; Howard Morgan on AI valuation risks The semiconductor industry is asking for more support as India pushes to gr",
-                "\nBrand: flipkart\nTopic: discounts\nSentiment: negative\nNews: Retailers roll out festival discounts amid inventory pressure, Gulf war concerns As concerns over the Gulf war loom large, Indian retailers ",
-                "\nBrand: myntra\nTopic: technology\nSentiment: neutral\nNews: The AI tsunami that is engulfing D2C startups Explore how AI is disrupting D2C startups by transforming search behavior and challenging tradit",
-                "\nBrand: nykaa\nTopic: other\nSentiment: positive\nNews: India\u2019s Rs 13,000 crore live events market fuelling experiential marketing push: BookMyShow\u2013EY report India live events: The report, titled Beyond ",
-                "\nBrand: nykaa\nTopic: competition\nSentiment: neutral\nNews: Broker\u2019s Call: \u00a0FSN E-commerce Ventures (Sell) HDFC Securities recommends selling FSN E-commerce Ventures with a target price of \u20b9205, citing "
-            ]
-        ],
-        "rag_market_risk": "**Ecommerce Market Risk Analysis**\n\n### 1. Key Market Signals\nThe main signals emerging from the news include:\n- Geopolitical tensions (Gulf war concerns) affecting consumer spending and IPO timelines.\n- Increased competition and inventory pressure leading to discounts.\n- Rising concerns over employment conditions in last-mile delivery.\n- AI disruption in D2C startups and traditional ecommerce models.\n- Regulatory and valuation considerations influencing startup headquarters relocation.\n\n### 2. Brand Impact\nThe ecommerce brands most affected are:\n- **Flipkart** and **Amazon**, with their quick commerce foray and discount strategies.\n- **Swiggy** and **Zepto**, facing profitability checks and debates over employment conditions.\n- **Myntra**, considering the impact of AI on D2C startups and traditional ecommerce.\n- **Nykaa**, in the context of competition and valuation considerations.\n\n### 3. Consumer Sentiment Drivers\nSentiment is driven by:\n- **Negative Sentiment**: Concerns over geopolitical tensions, inventory pressure, and employment conditions contribute to negative sentiment.\n- **Neutral Sentiment**: The impact of AI on D2C startups and ecommerce models is seen as a transformative force without a clear positive or negative leaning.\n\n### 4. Strategic Insight\nFor market observers, a key strategic takeaway is to **monitor the balance between quick commerce expansion and sustainable logistics practices**, as the industry faces pressures from consumer demand, geopolitical factors, and regulatory considerations.\n\n**Detected Market Risks:**\n1. **Logistics Risk**: Concerns over last-mile delivery employment conditions and sustainability.\n2. **Competition Pressure**: Increasing competition among ecommerce players, especially in quick commerce.\n3. **Consumer Complaints**: Potential for complaints related to delivery times, product availability, and employment practices.\n4. **Technology Disruption**: AI's role in transforming search behavior and challenging traditional ecommerce models.\n5. **Regulatory Risk**: Considerations around startup valuations, regulatory tailwinds, and the appeal of domestic versus international listings."
+        "rag_market_insight": "* Key Market Signals\n  * Indian retailers are slashing prices due to inventory pressure and Gulf war concerns (Source 1)\n  * Geopolitical tensions are delaying IPO timelines (Source 2)\n  * AI is disrupting D2C startups and challenging traditional e-commerce models (Source 4)\n  * Venture investing is expecting a correction in the AI boom (Source 5)\n\n* Brand Impact\n  * Flipkart is experiencing negative sentiment due to discounts and customer complaints (Source 1, Source 2)\n  * Reliance Digital has a neutral sentiment with no specific news about its performance (Source 3)\n  * Myntra is associated with the topic of technology, specifically AI in D2C startups (Source 4)\n  * Meesho is mentioned in the context of funding and venture investing (Source 5)\n\n* Consumer Sentiment Drivers\n  * Negative sentiment is linked to concerns over the Gulf war and inventory pressure, leading to cautious consumer behavior (Source 1)\n  * Customer complaints are also driving negative sentiment, specifically for Flipkart (Source 2)\n\n* Strategic Insight\n  * Ecommerce companies should focus on adapting to the changing technological landscape, such as AI disruption, to stay competitive in the market.",
+        "rag_market_risk": "* Key Market Signals\n  * Ecommerce players are expanding dark stores and offering discounts due to inventory pressure and concerns over consumer spending (Source 1, Source 2)\n  * There is a broader debate over employment conditions in the last-mile, instant delivery revenue stream (Source 1)\n  * Gulf war concerns are impacting consumer spending (Source 2)\n\n* Brand Impact\n  * bigbasket: facing logistics challenges and sentiment is negative (Source 1)\n  * Flipkart: expanding dark stores and offering discounts, facing pressure on profitability (Source 1, Source 2)\n  * Amazon India: expanding vehicle insurance offerings (Source 4)\n  * Reliance Digital: no specific impact mentioned, but mentioned in neutral sentiment context (Source 3, Source 5)\n\n* Consumer Sentiment Drivers\n  * Negative sentiment is driven by concerns over employment conditions in the last-mile delivery (Source 1)\n  * Positive sentiment is driven by expansion of services such as vehicle insurance offerings (Source 4)\n  * Discounts and inventory pressure are driving consumer spending decisions (Source 2)\n\n* Strategic Insight\n  * Ecommerce players should prioritize logistics and employment conditions in the last-mile delivery to maintain profitability and positive consumer sentiment, as evidenced by the challenges faced by bigbasket and the expansion of services by Amazon India (Source 1, Source 4)"
     },
     "forecasting": {
         "market_forecast": {
             "trend_direction": "Bearish",
             "trend_slope": -0.0678,
-            "volatility": 0.4132,
+            "volatility": 0.4133,
             "confidence_score": 0.587,
             "evaluation": {
-                "MAE": 0.3207,
-                "RMSE": 0.3996,
-                "R2": -2.8185
+                "MAE": 0.3219,
+                "RMSE": 0.4016,
+                "R2": -2.859
             },
             "feature_importance": {
-                "time_index": 0.239,
-                "sentiment_lag_1": 0.027,
-                "sentiment_lag_2": 0.004,
-                "rolling_mean_3": 0.009,
-                "sentiment_momentum": 0.091,
-                "sentiment_acceleration": 0.065,
-                "sin_week": 0.025,
-                "cos_week": 0.009,
-                "topic_momentum_score": 0.04,
-                "avg_topic_sentiment": 0.013,
-                "event_intensity": 0.01,
+                "time_index": 0.261,
+                "sentiment_lag_1": 0.034,
+                "sentiment_lag_2": 0.003,
+                "rolling_mean_3": 0.01,
+                "sentiment_momentum": 0.093,
+                "sentiment_acceleration": 0.06,
+                "sin_week": 0.02,
+                "cos_week": 0.013,
+                "topic_momentum_score": 0.047,
+                "avg_topic_sentiment": 0.012,
+                "event_intensity": 0.008,
                 "topic_intensity_3": 0.269,
                 "topic_intensity_5": 0.041,
-                "final_trend_score": 0.157,
+                "final_trend_score": 0.129,
                 "trend_velocity": 0.0,
                 "trend_sentiment_signal": 0.0
             },
@@ -446,154 +433,169 @@
                 },
                 {
                     "driver": "time index",
-                    "importance": 0.239
+                    "importance": 0.261
                 },
                 {
                     "driver": "final trend score",
-                    "importance": 0.157
+                    "importance": 0.129
                 }
             ],
-            "rag_forecast_explanation": "Based on the given context, here's the analysis of the predicted ecommerce market sentiment trend:\n\n**1. Key Market Signals**\nThe main signals emerging from the news include the disruption of traditional e-commerce models by AI, retailers offering discounts due to inventory pressure, and concerns over funding and market corrections.\n\n**2. Brand Impact**\n Brands such as Myntra and Reliance Digital are impacted by the AI-driven changes in the ecommerce landscape, while Flipkart is affected by the negative sentiment surrounding discounts and inventory pressure. Meesho is mentioned in the context of funding and market corrections.\n\n**3. Consumer Sentiment Drivers**\nThe consumer sentiment is driven by concerns over the Gulf war, inventory pressure, and the impact of AI on traditional ecommerce models. The negative sentiment surrounding Flipkart's discounts and the uncertainty around funding and market corrections are also contributing factors. The forecast trend direction is bearish, indicating a potential decline in market sentiment.\n\n**4. Strategic Insight**\nOne concise strategic takeaway for market observers is to monitor the impact of AI on ecommerce business models and consumer behavior, as it may lead to a shift in market dynamics and sentiment. Given the bearish trend direction and moderate market volatility (0.4132), ecommerce companies should be prepared to adapt to changing consumer preferences and market conditions.",
+            "rag_forecast_explanation": "* Key Market Signals\n  * Inventory pressure and Gulf war concerns are driving retailers to offer discounts, as seen in the news about festival discounts on electronics and home appliances\n  * The crypto market is expected to enter a more selective, institutional cycle ahead, according to CoinEx\n  * AI is disrupting D2C startups by transforming search behavior and challenging traditional e-commerce models\n\n* Brand Impact\n  * Flipkart is experiencing a negative sentiment due to the need to slash prices on electronics and home appliances to attract cautious consumers and clear stock\n  * Reliance Digital, Myntra, Meesho, and Ajio are mentioned in the context, but their sentiment is neutral, with no explicit negative or positive impact mentioned\n\n* Consumer Sentiment Drivers\n  * Consumer sentiment is driven by concerns over the Gulf war and inventory pressure, leading to a negative sentiment for discounts on electronics and home appliances\n  * The expected shift in the crypto market cycle and the impact of AI on D2C startups may also influence consumer sentiment, although the sentiment for these topics is neutral\n\n* Strategic Insight\n  * Ecommerce companies should prepare for a potential decline in market sentiment, as indicated by the predicted bearish trend, and focus on strategies to clear inventory and attract cautious consumers, such as offering targeted discounts and investing in AI-driven marketing initiatives.",
             "rag_forecast_sources": [
-                "\nBrand: myntra\nTopic: technology\nSentiment: neutral\nNews: The AI tsunami that is engulfing D2C startups Explore how AI is disrupting D2C startups by transforming search behavior and challenging tradit",
-                "\nBrand: flipkart\nTopic: discounts\nSentiment: negative\nNews: Retailers roll out festival discounts amid inventory pressure, Gulf war concerns As concerns over the Gulf war loom large, Indian retailers ",
-                "\nBrand: meesho\nTopic: funding\nSentiment: neutral\nNews: Exclusive: AI boom due for correction, strongest firms will endure: First Round Capital cofounder Howard Morgan In venture investing there are tw",
-                "\nBrand: ajio\nTopic: other\nSentiment: neutral\nNews: Judge of the Day: Marketing must own the P&L, says Arpan Biswas Judge of the Day: Marketing must own the P&L, says Arpan Biswasthedrum.com\n",
-                "\nBrand: reliance digital\nTopic: technology\nSentiment: neutral\nNews: Predictiv AI Appoints Multi-Agent Systems Pioneer Professor George Rzevski as Strategic Advisor to Advance Swarm AI Platforms TORONT"
+                {
+                    "source_id": 1,
+                    "content": "\nBrand: reliance digital\nTopic: other\nSentiment: neutral\nNews: Bitcoin Beyond the Halving: Why CoinEx Sees a More Selective, Institutional Crypto Cycle Ahead HONG KONG, March 20, 2026 (GLOBE NEWSWIRE)"
+                },
+                {
+                    "source_id": 2,
+                    "content": "\nBrand: flipkart\nTopic: discounts\nSentiment: negative\nNews: Retailers roll out festival discounts amid inventory pressure, Gulf war concerns As concerns over the Gulf war loom large, Indian retailers "
+                },
+                {
+                    "source_id": 3,
+                    "content": "\nBrand: myntra\nTopic: technology\nSentiment: neutral\nNews: The AI tsunami that is engulfing D2C startups Explore how AI is disrupting D2C startups by transforming search behavior and challenging tradit"
+                },
+                {
+                    "source_id": 4,
+                    "content": "\nBrand: meesho\nTopic: funding\nSentiment: neutral\nNews: Exclusive: AI boom due for correction, strongest firms will endure: First Round Capital cofounder Howard Morgan In venture investing there are tw"
+                },
+                {
+                    "source_id": 5,
+                    "content": "\nBrand: ajio\nTopic: other\nSentiment: neutral\nNews: Judge of the Day: Marketing must own the P&L, says Arpan Biswas Judge of the Day: Marketing must own the P&L, says Arpan Biswasthedrum.com\n"
+                }
             ],
             "forecasts": {
                 "7_day_forecast": [
-                    -0.0126,
-                    -0.0188,
-                    -0.02,
-                    -0.0039,
-                    -0.0263,
-                    -0.0262,
-                    0.0172
+                    -0.0219,
+                    -0.0187,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154
                 ],
                 "30_day_forecast": [
-                    -0.0126,
-                    -0.0188,
-                    -0.02,
-                    -0.0039,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188
+                    -0.0219,
+                    -0.0187,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184
                 ],
                 "90_day_forecast": [
-                    -0.0126,
-                    -0.0188,
-                    -0.02,
-                    -0.0039,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.019,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262,
-                    0.0172,
-                    -0.004,
-                    -0.0188,
-                    -0.02,
-                    -0.0027,
-                    -0.0263,
-                    -0.0262
+                    -0.0219,
+                    -0.0187,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0171,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265,
+                    0.0154,
+                    -0.0147,
+                    -0.0184,
+                    -0.0217,
+                    -0.0044,
+                    -0.0266,
+                    -0.0265
                 ]
             }
         },
@@ -604,19 +606,19 @@
     "explainability": {
         "topic_sentiment_matrix": [
             {
-                "topic": "funding",
-                "sentiment_score": 0.375
-            },
-            {
                 "topic": "expansion",
                 "sentiment_score": 0.3333333333333333
             },
             {
                 "topic": "other",
-                "sentiment_score": 0.3
+                "sentiment_score": 0.23076923076923078
             },
             {
-                "topic": "competition",
+                "topic": "funding",
+                "sentiment_score": 0.08333333333333333
+            },
+            {
+                "topic": "discounts",
                 "sentiment_score": 0.0
             },
             {
@@ -624,12 +626,8 @@
                 "sentiment_score": 0.0
             },
             {
-                "topic": "discounts",
-                "sentiment_score": -0.07692307692307693
-            },
-            {
                 "topic": "technology",
-                "sentiment_score": -0.18181818181818182
+                "sentiment_score": -0.058823529411764705
             },
             {
                 "topic": "customer_complaints",
@@ -642,7 +640,7 @@
         ],
         "topic_explainability": {
             "other": {
-                "avg_sentiment": 0.3,
+                "avg_sentiment": 0.231,
                 "example_articles": [
                     "Luxury Fashion Market Report Forecast and Company Analysis 2025-2033 Featuring Kering, Burberry, Dolce & Gabbana,. Giorgio Armani, Capri, LVMH, Prada, Chanel, Diesel, Industria de Diseno Textil The global luxury fashion market is set for substantial growth, expanding from $257.45 billion in 2025 to $337.18 billion by 2033, at a CAGR of 3.43%. Factors propelling this growth include rising disposable incomes, changing consumer behaviors, and heightene\u2026",
                     "Judge of the Day: Marketing must own the P&L, says Arpan Biswas Judge of the Day: Marketing must own the P&L, says Arpan Biswasthedrum.com",
@@ -650,11 +648,11 @@
                 ]
             },
             "funding": {
-                "avg_sentiment": 0.375,
+                "avg_sentiment": 0.083,
                 "example_articles": [
                     "Fractal Industries shares to list today. Check GMP ahead of debut Fractal Industries is poised for its BSE SME debut with modest listing gains expected around 3%. The Rs 49 crore IPO, fully subscribed 5.44 times, will fund working capital and corporate needs.  The garment manufacturer, serving major e-commerce platforms, re\u2026",
                     "Prime Video ups the ante with 55-title India slate, expands theatrical push Prime Video unveiled its largest-ever Indian Originals slate, featuring nearly 55 series and films across Hindi, Tamil, and Telugu. The platform is also venturing into theatrical releases through Amazon MGM Studios India, showcasing a significant investment i\u2026",
-                    "Uni\u2019s valuation slashed; Howard Morgan on AI, venture investing, more Happy Thursday! Fintech startup Uni is staring at a steep valuation cut as it looks to raise fresh capital amid regulatory headwinds. This and more in today\u2019s ETtech Morning Dispatch."
+                    "Flipkart group CFO Sriram Venkataraman quits amid ecommerce company\u2019s IPO plans Venkatraman, a decade-long company veteran who joined in 2015, will exit over the coming months. Flipkart has not named a successor yet."
                 ]
             },
             "expansion": {
@@ -666,15 +664,15 @@
                 ]
             },
             "technology": {
-                "avg_sentiment": -0.182,
+                "avg_sentiment": -0.059,
                 "example_articles": [
                     "Semicon firms seek sops; Howard Morgan on AI valuation risks The semiconductor industry is asking for more support as India pushes to grow its chip ecosystem. This and more in today's ETtech Top 5.",
                     "\u2018Project Hail Mary\u2019 To Orbit Around $100M+ WW Opening; \u2018Ready Or Not 2\u2019 $14M WW \u2013 Preview There\u2019s already excellent word of mouth for Amazon MGM Studios\u2019 sci-fi dramedy, Project Hail Mary, with a 98% Rotten Tomatoes audience score and 95% certified fresh from critics. The global outlook is around $100M+ with a 90% offshore footprint or 82 markets.\u2026",
-                    "Jio's IPO prep; Nazara Technologies' fresh bets Reliance Industries has roped in 17 top banks for the planned Jio Platforms IPO. This and more in today's ETtech Top 5."
+                    "Catholic bishops demand 'withdrawal or revision' of Maharashtra's new anti-conversion law Catholic bishops in Maharashtra have voiced \"deep disappointment and strong protest\" against the recently passed Maharashtra Freedom of Religion Act 2026. They are demanding its \"withdrawal or substantial revision,\" asserting that the law undermines the const\u2026"
                 ]
             },
             "discounts": {
-                "avg_sentiment": -0.077,
+                "avg_sentiment": 0.0,
                 "example_articles": [
                     "Powerbeats Pro 2 gets a Nike edition for $249.99, but the standard version is down to $200 Beats and Nike have jointly announced a special edition of the Powerbeats Pro 2 with a custom finish for the earbuds and charging case. However, there's a deal on the standard colors on Amazon for those who wish to save some money.",
                     "AI startup Yotta seeks $4 billion valuation ahead of planned IPO The Mumbai-based company is aiming to secure roughly $500 million to $600 million in capital and then file its formal listing documents within weeks, according to people familiar with the matter. It plans to raise a similar amount in the public offering.",
@@ -691,12 +689,6 @@
                 "avg_sentiment": -1.0,
                 "example_articles": [
                     "War slows IPOs, but startups keep bringing headquarters home Though geopolitical tensions are delaying IPO timelines, India\u2019s tech startups are pressing ahead with plans to relocate their headquarters back home. Richer valuations, deep domestic liquidity, regulatory tailwinds and waning US listing appeal are driving th\u2026"
-                ]
-            },
-            "competition": {
-                "avg_sentiment": 0.0,
-                "example_articles": [
-                    "Broker\u2019s Call: \u00a0FSN E-commerce Ventures (Sell) HDFC Securities recommends selling FSN E-commerce Ventures with a target price of \u20b9205, citing medium-term growth concerns."
                 ]
             },
             "partnership": {

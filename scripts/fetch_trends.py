@@ -1,64 +1,136 @@
 from serpapi import GoogleSearch
 import pandas as pd
 import os
+from datetime import datetime, timedelta
 from config import ECOMMERCE_BRANDS, SERP_API_KEY
 
 API_KEY = SERP_API_KEY
 brands = ECOMMERCE_BRANDS
-OUTPUT_PATH = "../data/processed/trend_data.csv"
+
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..")
+)
+
+OUTPUT_PATH = os.path.join(BASE_DIR, "data", "raw", "trend_data.csv")
+
 
 # ---------------------------
-# Helper: split into chunks of 5
+# CONTROL FETCH FREQUENCY
+# ---------------------------
+def should_fetch_trends(file_path, hours=12):
+    if not os.path.exists(file_path):
+        return True
+
+    last_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
+    now = datetime.now()
+
+    return (now - last_modified) > timedelta(hours=hours)
+
+
+# ---------------------------
+# SPLIT INTO BATCHES
 # ---------------------------
 def chunk_list(lst, size=5):
     for i in range(0, len(lst), size):
         yield lst[i:i + size]
 
-all_data = []
 
 # ---------------------------
-# FETCH IN BATCHES
+# MAIN FETCH FUNCTION
 # ---------------------------
-for batch in chunk_list(brands, 5):
-    print(f"Fetching for: {batch}")
+def fetch_trends():
 
-    params = {
-        "engine": "google_trends",
-        "q": ",".join(batch),
-        "data_type": "TIMESERIES",
-        "geo": "IN",
-        "api_key": API_KEY
-    }
+    print("Fetching Google Trends data...")
 
-    search = GoogleSearch(params)
-    results = search.get_dict()
+    all_data = []
 
-    interest = results.get("interest_over_time", {})
+    for batch in chunk_list(brands, 5):
+        print(f"Fetching for: {batch}")
 
-    if not interest:
-        print("❌ No data for batch:", batch)
-        print(results)
-        continue
+        params = {
+            "engine": "google_trends",
+            "q": ",".join(batch),
+            "data_type": "TIMESERIES",
+            "geo": "IN",
+            "api_key": API_KEY
+        }
 
-    timeline = interest.get("timeline_data", [])
+        try:
+            search = GoogleSearch(params)
+            results = search.get_dict()
 
-    for entry in timeline:
-        date = entry["date"]
+            interest = results.get("interest_over_time", {})
 
-        for value in entry["values"]:
-            all_data.append({
-                "date": date,
-                "brand": value["query"],
-                "trend_score": value["value"]
-            })
+            if not interest:
+                print("❌ No data for batch:", batch)
+                continue
+
+            timeline = interest.get("timeline_data", [])
+
+            for entry in timeline:
+                date = entry["date"]
+
+                for value in entry["values"]:
+                    all_data.append({
+                        "date": date,
+                        "brand": value["query"].lower(),
+                        "raw_score": value["value"]
+                    })
+
+        except Exception as e:
+            print(f"Error fetching batch {batch}: {e}")
+
+    if not all_data:
+        print("❌ No trend data collected")
+        return
+
+    df = pd.DataFrame(all_data)
+    # ---------------------------
+    # 🔥 CLEAN RAW SCORE (FIX)
+    # ---------------------------
+    df["raw_score"] = df["raw_score"].astype(str)
+
+    # handle "<1" → 0.5
+    df["raw_score"] = df["raw_score"].str.replace("<1", "0.5")
+
+    df["raw_score"] = pd.to_numeric(df["raw_score"], errors="coerce")
+    df["raw_score"] = df["raw_score"].fillna(0)
+
+    # ---------------------------
+    # 🔥 GLOBAL NORMALIZATION (FIX)
+    # ---------------------------
+    max_score = df["raw_score"].max()
+
+    if max_score == 0:
+        df["trend_score"] = 0
+    else:
+        df["trend_score"] = df["raw_score"] / max_score
+
+    # ---------------------------
+    # OPTIONAL: SMOOTHING
+    # ---------------------------
+    df["trend_score"] = df.groupby("brand")["trend_score"].transform(
+        lambda x: x.rolling(3, min_periods=1).mean()
+    )
+
+    # ---------------------------
+    # CLEAN
+    # ---------------------------
+    df = df[["date", "brand", "trend_score"]]
+
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    df.to_csv(OUTPUT_PATH, index=False)
+
+    print("✅ Trend data saved successfully!")
+    print(df.head())
+
 
 # ---------------------------
-# SAVE
+# RUN STANDALONE
 # ---------------------------
-df = pd.DataFrame(all_data)
+if __name__ == "__main__":
 
-os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-df.to_csv(OUTPUT_PATH, index=False)
-
-print("✅ Trend data saved successfully!")
-print(df.head())
+    if should_fetch_trends(OUTPUT_PATH):
+        fetch_trends()
+    else:
+        print("Using cached trend data")

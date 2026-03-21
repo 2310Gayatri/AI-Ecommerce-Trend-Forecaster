@@ -32,6 +32,7 @@ def generate_consumer_insights(BASE_DIR):
     consumer_df = pd.read_csv(consumer_path)
 
     consumer_df["brand"] = consumer_df["brand"].str.strip().str.lower()
+    consumer_df = consumer_df[consumer_df["brand"] != "other"]
 
     # sort
     consumer_df = consumer_df.sort_values(
@@ -50,9 +51,9 @@ def generate_consumer_insights(BASE_DIR):
 
     # distribution
     sentiment_distribution = {
-        "positive": int((consumer_df["final_consumer_sentiment"] > 0).sum()),
-        "negative": int((consumer_df["final_consumer_sentiment"] < 0).sum()),
-        "neutral": int((consumer_df["final_consumer_sentiment"] == 0).sum())
+        "positive": int((consumer_df["raw_sentiment"] > 0.05).sum()),
+        "negative": int((consumer_df["raw_sentiment"] < -0.05).sum()),
+        "neutral": int(((consumer_df["raw_sentiment"] >= -0.05) & (consumer_df["raw_sentiment"] <= 0.05)).sum())
     }
 
     # AI insight

@@ -24,3 +24,4 @@ langchain-huggingface>=0.0.3
 sentence-transformers>=2.7
 
 faiss-cpu>=1.7
+reportlab

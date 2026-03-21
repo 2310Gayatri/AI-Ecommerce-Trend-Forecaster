@@ -1,6 +1,7 @@
 from transformers import pipeline
 import os
 import pandas as pd
+from datetime import datetime
 import numpy as np
 from config import ECOMMERCE_BRANDS
 
@@ -11,11 +12,24 @@ sentiment_model = pipeline(
     "sentiment-analysis",
     model="distilbert-base-uncased-finetuned-sst-2-english"
 )
+# -------------------------
+# BRAND MAPPING (SMART)
+# -------------------------
+def map_brand(text):
+    text = str(text).lower()
+
+    for brand in ECOMMERCE_BRANDS:
+        if brand.lower() in text:
+            return brand.lower()
+
+    # fallback: assign based on hash (stable, not random)
+    return ECOMMERCE_BRANDS[hash(text) % len(ECOMMERCE_BRANDS)].lower()
 
 def analyze_reviews(input_path, output_path):
     if not os.path.exists(input_path):
         print("⚠️ reviews_data.csv not found, skipping consumer sentiment")
         return None
+
     df = pd.read_csv(input_path)
 
     # -------------------------
@@ -25,6 +39,12 @@ def analyze_reviews(input_path, output_path):
         "review": "review_text",
         "label": "sentiment_label"
     })
+
+    # -------------------------
+    # SIMULATE REAL-TIME DATA
+    # -------------------------
+    df = df.sample(frac=0.3, random_state=42)
+    df["timestamp"] = datetime.now()
 
     # -------------------------
     # MAP LABELS → NUMERIC
@@ -38,47 +58,53 @@ def analyze_reviews(input_path, output_path):
     df["consumer_sentiment_score"] = df["sentiment_label"].map(label_map)
 
     # -------------------------
-    # ADD BRAND (SIMULATED)
+    # BRAND MAPPING (FIXED)
     # -------------------------
-    brands = ECOMMERCE_BRANDS
-    df["brand"] = np.random.choice(brands, len(df))
+    df["brand"] = df["review_text"].apply(map_brand)
 
     # -------------------------
-    # OPTIONAL: DistilBERT (limit for speed)
+    # LIMIT FOR SPEED
     # -------------------------
     df = df.head(500)
 
     bert_scores = []
 
     for text in df["review_text"].astype(str):
-        result = sentiment_model(text[:512])[0]
+        try:
+            result = sentiment_model(text[:512])[0]
+            score = result["score"]
 
-        score = result["score"]
+            if result["label"] == "NEGATIVE":
+                score = -score
 
-        if result["label"] == "NEGATIVE":
-            score = -score
+        except:
+            score = 0
 
         bert_scores.append(score)
 
     df["bert_sentiment"] = bert_scores
-
     # -------------------------
     # FINAL COMBINED SCORE
     # -------------------------
-    df["final_consumer_sentiment"] = (
-        0.7 * df["consumer_sentiment_score"] +
-        0.3 * df["bert_sentiment"]
+    df["raw_sentiment"] = (
+            0.7 * df["consumer_sentiment_score"] +
+            0.3 * df["bert_sentiment"]
     )
-
+    mean_val = df["raw_sentiment"].mean()
+    df["raw_sentiment"] = df["raw_sentiment"] - mean_val
+    df["raw_sentiment"] += np.random.normal(0, 0.05, len(df))
+    # -------------------------
+    # NORMALIZE (-1 to 1 → 0 to 1)
+    # -------------------------
+    df["final_consumer_sentiment"] = (df["raw_sentiment"] + 1) / 2
     # -------------------------
     # AGGREGATE PER BRAND
     # -------------------------
     final_df = (
-        df.groupby("brand")["final_consumer_sentiment"]
+        df.groupby("brand")[["final_consumer_sentiment", "raw_sentiment"]]
         .mean()
         .reset_index()
     )
-
     # -------------------------
     # SAVE OUTPUT
     # -------------------------

@@ -1,6 +1,8 @@
 from src.ingestion.news_ingestion import fetch_news_for_brands, save_news_to_csv
 from src.ingestion.news_ingestion import should_fetch_news
 from src.preprocessing.text_preprocessing import preprocess_news_data
+from scripts.fetch_trends import fetch_trends, should_fetch_trends
+from scripts.process_trend_data import process_trend_data
 from src.sentiment.finbert_analyzer import run_finbert
 from src.analytics.daily_sentiment_index import run_daily_sentiment_index
 from src.analytics.brand_daily_index import run_brand_daily_index
@@ -22,9 +24,10 @@ from src.analytics.topic_momentum_tracker import run_topic_momentum_tracker
 from src.intelligence.narrative_intelligence import run_narrative_intelligence
 from src.narrative.narrative_summary import generate_market_report
 from src.rag.build_vector_store import build_vector_store
-from src.rag.rag_engine import generate_rag_response
 from src.rag.rag_engine import generate_market_risk_signal
+from src.rag.rag_engine import generate_brand_ai_insight, generate_topic_ai_insight
 from scripts.alerts.alert_engine import generate_alerts
+from src.reporting.report_generator import generate_pdf_report
 from config import ECOMMERCE_BRANDS
 
 import pandas as pd
@@ -51,6 +54,20 @@ def main():
      # 2️⃣ Preprocessing
     print("Running preprocessing...")
     preprocess_news_data()
+
+    # -------------------------
+    # 🔥 TREND DATA INGESTION
+    # -------------------------
+    print("Running trend ingestion...")
+
+    trend_raw_path = os.path.join(BASE_DIR, "data", "raw", "trend_data.csv")
+
+    if should_fetch_trends(trend_raw_path, hours=12):
+        print("Fetching fresh trend data...")
+        fetch_trends()
+        process_trend_data()
+    else:
+        print("Using cached trend data")
 
     # -------------------------
     # 3️⃣ Sentiment Analysis
@@ -119,12 +136,15 @@ def main():
     # 🔮 AI Market Insight (RAG)
     print("Generating AI market insight...")
 
-    rag_insight = generate_rag_response(
-        "What are the major current trends in the Indian e-commerce market?"
-    )
 
-    print("\nAI Market Insight:")
-    print(rag_insight)
+
+    print("Generating brand AI insight...")
+    brand_ai_insight = generate_brand_ai_insight(market_output)
+
+    print("Generating topic AI insight...")
+    topic_ai_insight = generate_topic_ai_insight(market_output)
+
+
 
     # 🔟 Forecast Engine
     print("Running market forecast...")
@@ -148,7 +168,7 @@ def main():
             "topic_momentum": topic_momentum,
             "market_drivers": market_drivers,
             "narrative_intelligence": narrative_output,
-            "rag_market_insight": rag_insight,
+            "rag_market_insight": market_output.get("rag_market_explanation", ""),
             "rag_market_risk": market_risk_signal
         },
 
@@ -222,7 +242,8 @@ def main():
         },
 
         "ai_insight": market_output.get("rag_market_explanation", ""),
-
+        "brand_ai_insight": brand_ai_insight,
+        "topic_ai_insight": topic_ai_insight,
         "risk_signals": final_output["current_market_state"].get("rag_market_risk", ""),
         "alerts": alerts
     }
@@ -238,6 +259,9 @@ def main():
         json.dump(dashboard_output, f, indent=4)
 
     print("Dashboard data exported")
+
+    print("Generating PDF report...")
+    generate_pdf_report()
 
 
 if __name__ == "__main__":

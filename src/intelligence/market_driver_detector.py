@@ -20,7 +20,15 @@ def detect_market_drivers(top_n=3):
     if df.empty:
         return {"drivers": []}
 
-    df["date"] = pd.to_datetime(df["Published_Date"])
+    df["date"] = pd.to_datetime(
+        df["Published_Date"],
+        errors="coerce",
+        utc=True
+    )
+
+    df = df.dropna(subset=["date"])
+
+    df["date"] = df["date"].dt.tz_localize(None)
 
     df = df.sort_values("date")
 

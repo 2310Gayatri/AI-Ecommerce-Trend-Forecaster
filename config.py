@@ -6,7 +6,7 @@ load_dotenv()
 # API Keys
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
+SERP_API_KEY = os.getenv("SERP_API_KEY")
 # Ecommerce brands to track
 ECOMMERCE_BRANDS = [
     "Flipkart",

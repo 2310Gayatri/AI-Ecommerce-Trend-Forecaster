@@ -25,8 +25,15 @@ def run_market_intelligence():
 
     master_df = load_master_dataset()
 
-    master_df["date"] = pd.to_datetime(master_df["date"])
-    master_df["date"] = master_df["date"].dt.date
+    master_df["date"] = pd.to_datetime(
+        master_df["date"],
+        errors="coerce",
+        utc=True
+    )
+
+    master_df = master_df.dropna(subset=["date"])
+
+    master_df["date"] = master_df["date"].dt.tz_localize(None).dt.date
 
     # -------------------------
     # 1️⃣ Topic Trend Intelligence
@@ -98,8 +105,14 @@ def run_market_intelligence():
     # -------------------------
 
     # convert dates to datetime
-    daily_df["date"] = pd.to_datetime(daily_df["date"])
-    master_df["date"] = pd.to_datetime(master_df["date"])
+    daily_df["date"] = pd.to_datetime(daily_df["date"], errors="coerce", utc=True)
+    master_df["date"] = pd.to_datetime(master_df["date"], errors="coerce", utc=True)
+
+    daily_df = daily_df.dropna(subset=["date"])
+    master_df = master_df.dropna(subset=["date"])
+
+    daily_df["date"] = daily_df["date"].dt.tz_localize(None).dt.date
+    master_df["date"] = master_df["date"].dt.tz_localize(None).dt.date
 
     # aggregate final trend from master dataset
     trend_daily = (

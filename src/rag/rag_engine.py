@@ -42,7 +42,9 @@ vector_store = FAISS.load_local(
     allow_dangerous_deserialization=True
 )
 
-retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+retriever = vector_store.as_retriever(
+    search_kwargs={"k": 5, "fetch_k": 10}
+)
 
 
 # -----------------------------
@@ -62,40 +64,64 @@ def generate_rag_response(query):
 
     client = get_llm_client()
 
-    docs = retriever.invoke(query)
+    # Improve retrieval with context hint
+    enhanced_query = f"ecommerce market trends {query}"
 
-    sources = [doc.page_content[:200] for doc in docs]
+    docs = retriever.invoke(enhanced_query)
 
-    context = "\n\n".join([doc.page_content[:400] for doc in docs])
+    # Handle empty retrieval (edge case)
+    if not docs:
+        return "No relevant information found in the dataset.", []
+
+    sources = [
+        {
+            "source_id": i + 1,
+            "content": doc.page_content[:200]
+        }
+        for i, doc in enumerate(docs)
+    ]
+
+    context = "\n\n".join([
+        f"[Source {i + 1}]\n{doc.page_content[:400]}"
+        for i, doc in enumerate(docs)
+    ])
 
     prompt = f"""
-You are a senior ecommerce market intelligence analyst.
+    You are a senior ecommerce market intelligence analyst.
 
-Analyze the news context and answer the query using structured reasoning.
+    Your task is to analyze the provided news context STRICTLY based on evidence.
 
-Context:
-{context}
+    ⚠️ RULES:
+    - Use ONLY the provided context.
+    - DO NOT make assumptions or guesses.
+    - If information is not present, say "Not explicitly mentioned".
+    - Be specific and reference brands/topics from context.
+    - Always reference source numbers like (Source 1), (Source 2).
 
-Question:
-{query}
+    Context:
+    {context}
 
-Follow this reasoning structure:
+    Question:
+    {query}
 
-1. Key Market Signals
-Identify the main signals emerging from the news.
+    Provide output using clean bullet points (no numbering).
 
-2. Brand Impact
-Explain which ecommerce brands are most affected.
+    1. Key Market Signals
+    - Bullet points of clear signals from the news.
 
-3. Consumer Sentiment Drivers
-Explain why sentiment is positive or negative.
+    2. Brand Impact
+    - Mention ONLY brands explicitly present in the context.
+    - Explain impact using evidence.
 
-4. Strategic Insight
-Provide one concise strategic takeaway for market observers.
+    3. Consumer Sentiment Drivers
+    - Link sentiment to actual events/topics in context.
 
-Answer clearly and concisely.
-"""
-
+    4. Strategic Insight
+    - One concise, actionable takeaway.
+    
+    Avoid generic statements like "may", "might", or "could".
+    Keep the answer concise, factual, and evidence-based.
+    """
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
@@ -109,21 +135,65 @@ Answer clearly and concisely.
 # -----------------------------
 
 def generate_market_risk_signal():
-
     query = """
-Analyze the ecommerce news context and identify any emerging market risks.
+    Analyze ecommerce market risks STRICTLY based on the provided context.
 
-Classify risks into the following categories:
+    Classify risks into:
 
-1. Regulatory risk
-2. Logistics risk
-3. Competition pressure
-4. Consumer complaints
-5. Technology disruption
+    - Regulatory risk
+    - Logistics risk
+    - Competition pressure
+    - Consumer complaints
+    - Technology disruption
 
-Return a short structured summary of detected risks.
-"""
+    For each risk:
+    - Mention the affected brand
+    - Provide supporting evidence
+    - Reference sources
+
+    If no evidence exists, say "Not explicitly mentioned".
+
+    Keep output concise and structured.
+    """
 
     insight, sources = generate_rag_response(query)
+
+    return insight
+
+# -----------------------------
+# Brand Insight Generator
+# -----------------------------
+def generate_brand_ai_insight(market_output):
+
+    query = f"""
+Analyze brand performance trends using the news context.
+
+Top positive brand: {market_output['top_positive_brand']}
+Top negative brand: {market_output['top_negative_brand']}
+
+Explain clearly WHY these brands are performing this way based ONLY on the context.
+"""
+
+    insight, _ = generate_rag_response(query)
+
+    return insight
+
+
+# -----------------------------
+# Topic Insight Generator
+# -----------------------------
+def generate_topic_ai_insight(market_output):
+
+    query = f"""
+Explain the topic trends in the ecommerce market.
+
+Top topics: {market_output['top_topics']}
+Fastest rising topic: {market_output['fastest_rising_topic']}
+Fastest declining topic: {market_output['fastest_declining_topic']}
+
+Explain WHY these topics are rising or falling based ONLY on the context.
+"""
+
+    insight, _ = generate_rag_response(query)
 
     return insight
