@@ -43,7 +43,7 @@ vector_store = FAISS.load_local(
 )
 
 retriever = vector_store.as_retriever(
-    search_kwargs={"k": 5, "fetch_k": 10}
+    search_kwargs={"k": 8, "fetch_k": 20}
 )
 
 
@@ -97,6 +97,8 @@ def generate_rag_response(query):
     - If information is not present, say "Not explicitly mentioned".
     - Be specific and reference brands/topics from context.
     - Always reference source numbers like (Source 1), (Source 2).
+    - If a brand is not present in the context, DO NOT mention it.
+    - Do not combine external signals (like top_negative_brand) with retrieved context.
 
     Context:
     {context}
@@ -122,10 +124,19 @@ def generate_rag_response(query):
     Avoid generic statements like "may", "might", or "could".
     Keep the answer concise, factual, and evidence-based.
     """
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[{"role": "user", "content": prompt}],
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+        )
+
+        answer = response.choices[0].message.content
+
+    except Exception as e:
+        print(f"⚠️ LLM skipped due to: {e}")
+        answer = "LLM response skipped due to rate limit."
+
+    return answer, sources
 
     return response.choices[0].message.content, sources
 
@@ -164,16 +175,15 @@ def generate_market_risk_signal():
 # Brand Insight Generator
 # -----------------------------
 def generate_brand_ai_insight(market_output):
+    query = """
+    Analyze brand performance trends using ONLY the provided news context.
 
-    query = f"""
-Analyze brand performance trends using the news context.
+    - Identify which brands show positive or negative sentiment based strictly on evidence.
+    - Do NOT assume any brand performance unless explicitly supported.
+    - If insufficient data exists, say "Not explicitly mentioned".
 
-Top positive brand: {market_output['top_positive_brand']}
-Top negative brand: {market_output['top_negative_brand']}
-
-Explain clearly WHY these brands are performing this way based ONLY on the context.
-"""
-
+    Explain clearly WHY brands are performing this way based ONLY on the context.
+    """
     insight, _ = generate_rag_response(query)
 
     return insight
@@ -183,16 +193,15 @@ Explain clearly WHY these brands are performing this way based ONLY on the conte
 # Topic Insight Generator
 # -----------------------------
 def generate_topic_ai_insight(market_output):
+    query = """
+    Explain topic trends in the ecommerce market using ONLY the provided context.
 
-    query = f"""
-Explain the topic trends in the ecommerce market.
+    - Identify which topics are increasing or decreasing based on evidence.
+    - Do NOT rely on external computed metrics.
+    - If not explicitly mentioned, say "Not explicitly mentioned".
 
-Top topics: {market_output['top_topics']}
-Fastest rising topic: {market_output['fastest_rising_topic']}
-Fastest declining topic: {market_output['fastest_declining_topic']}
-
-Explain WHY these topics are rising or falling based ONLY on the context.
-"""
+    Explain WHY these topics are rising or falling.
+    """
 
     insight, _ = generate_rag_response(query)
 

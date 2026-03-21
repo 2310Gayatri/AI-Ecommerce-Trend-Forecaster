@@ -26,11 +26,10 @@ from src.narrative.narrative_summary import generate_market_report
 from src.rag.build_vector_store import build_vector_store
 from src.rag.rag_engine import generate_market_risk_signal
 from src.rag.rag_engine import generate_brand_ai_insight, generate_topic_ai_insight
-from scripts.alerts.alert_engine import generate_alerts
+from src.alerts.alert_engine import generate_alerts
 from src.reporting.report_generator import generate_pdf_report
 from config import ECOMMERCE_BRANDS
 
-import pandas as pd
 import json
 from datetime import datetime
 import os
@@ -65,10 +64,9 @@ def main():
     if should_fetch_trends(trend_raw_path, hours=12):
         print("Fetching fresh trend data...")
         fetch_trends()
-        process_trend_data()
     else:
         print("Using cached trend data")
-
+    process_trend_data()
     # -------------------------
     # 3️⃣ Sentiment Analysis
     # -------------------------
@@ -144,14 +142,23 @@ def main():
     print("Generating topic AI insight...")
     topic_ai_insight = generate_topic_ai_insight(market_output)
 
-
-
     # 🔟 Forecast Engine
     print("Running market forecast...")
     market_forecast = forecast_market_sentiment()
 
     print("Running brand forecast...")
     brand_forecast = forecast_brand_sentiment()
+
+    # -------------------------
+    # 🔮 Future Leader Detection
+    # -------------------------
+    try:
+        future_leader = (
+            brand_forecast.sort_values("predicted_score", ascending=False)
+            .iloc[0]["brand"]
+        )
+    except:
+        future_leader = None
 
     # 1️⃣1️⃣ Explainability Engine
     print("Running explainability engine...")
@@ -238,9 +245,12 @@ def main():
         "forecast": {
             "7_day": market_forecast["forecasts"]["7_day_forecast"],
             "30_day": market_forecast["forecasts"]["30_day_forecast"],
-            "90_day": market_forecast["forecasts"]["90_day_forecast"]
+            "90_day": market_forecast["forecasts"]["90_day_forecast"],
+            "brand_forecast": brand_forecast
         },
-
+        "future_projection": {
+            "projected_leader": future_leader
+        },
         "ai_insight": market_output.get("rag_market_explanation", ""),
         "brand_ai_insight": brand_ai_insight,
         "topic_ai_insight": topic_ai_insight,

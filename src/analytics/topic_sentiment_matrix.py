@@ -28,7 +28,14 @@ def run_topic_sentiment_matrix():
         "negative": -1
     }
 
-    df["sentiment_score"] = df["finbert_label"].map(mapping)
+    df["sentiment_score"] = (
+        df["finbert_label"]
+        .str.lower()
+        .str.strip()
+        .map(mapping)
+    )
+
+    df["sentiment_score"] = df["sentiment_score"].fillna(0)
 
     # -----------------------------
     # Compute topic sentiment

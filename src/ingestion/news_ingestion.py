@@ -151,27 +151,3 @@ def save_news_to_csv(df):
 
     print(f"Rows saved: {len(df)}")
 
-
-# ------------------------------------------------
-# Run Script
-# ------------------------------------------------
-
-if __name__ == "__main__":
-
-    print("Starting multi-brand news ingestion...\n")
-
-    brands = ECOMMERCE_BRANDS
-
-    df = fetch_news_for_brands(brands, page_size=10)
-
-    if df is not None and not df.empty:
-
-        save_news_to_csv(df)
-
-        print("\nSample Data:\n")
-
-        print(df.head())
-
-    else:
-
-        print("No data fetched from NewsAPI.")

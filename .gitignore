@@ -18,50 +18,58 @@ __pycache__/
 
 # vector databases
 vector_store/
-src/rag/vector_store/
 # ---------------------------
-# Data Files (Generated)
+# Ignore ALL Data by Default
 # ---------------------------
-
-# Ignore raw + cache
-data/raw/*
-data/archive/*
-data/cache/
-scripts/data/
+data/*
 
 # ---------------------------
-# KEEP IMPORTANT FILES
+# ✅ KEEP ONLY ESSENTIAL FILES
 # ---------------------------
+
+# Processed data needed for forecasting
 !data/processed/
 !data/processed/daily_market_metrics.csv
 !data/processed/brand_daily_metrics.csv
 !data/processed/trend_data_cleaned.csv
-!data/processed/reviews_data.csv
 !data/processed/final_market_signal.json
+!data/processed/reviews_data.csv
 
+# Dashboard / final outputs
 !data/output/
 !data/output/market_dashboard_data.json
-# Ignore intermediate pipeline files
+
+# ---------------------------
+# ❌ IGNORE EVERYTHING ELSE
+# ---------------------------
+
+# Intermediate processed files
 data/processed/cleaned_news.csv
 data/processed/news_master_dataset.csv
 data/processed/news_with_topics.csv
 data/processed/finbert_output.csv
-data/processed/finbert_summary.json
 data/processed/consumer_sentiment.csv
-data/processed/trend_data.csv
-data/output/*
+data/processed/topic_momentum.csv
+data/processed/topic_sentiment_matrix.csv
 
-# ---------------------------
-# IGNORE INTERMEDIATE FILES
-# ---------------------------
+# Raw + cache
+data/raw/*
+data/archive/*
+data/cache/
 
-# Ignore images
+# Output visuals + reports
 data/output/*.png
+data/output/*.pdf
+data/output/alerts.json
 
+# ---------------------------
 # Keep folder structure
+# ---------------------------
 !data/raw/.gitkeep
 !data/archive/.gitkeep
 
-# OS
+# ---------------------------
+# OS Files
+# ---------------------------
 .DS_Store
 Thumbs.db

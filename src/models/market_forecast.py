@@ -8,7 +8,7 @@ import os
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 )
-
+from config import ECOMMERCE_BRANDS
 from src.utils.data_loader import load_daily_metrics, load_brand_metrics
 from src.rag.rag_engine import generate_rag_response
 from src.utils.data_loader import load_master_dataset
@@ -160,6 +160,22 @@ def forecast_market_sentiment():
         on="date",
         how="left"
     )
+    # -------------------------
+    # 🔥 ADD INTELLIGENCE FEATURES (NEW)
+    # -------------------------
+
+    # narrative risk (proxy using topics)
+    risk_topics = ["customer_complaints", "logistics"]
+
+    df["narrative_risk_score"] = (
+        df[risk_topics].sum(axis=1)
+    )
+
+    # market shock
+    df["market_shock"] = (
+            df["final_trend_score"] -
+            df["final_trend_score"].rolling(5).mean()
+    ).fillna(0)
 
     # fill missing
     df["final_trend_score"] = df["final_trend_score"].fillna(0)
@@ -250,7 +266,9 @@ def forecast_market_sentiment():
         "topic_intensity_5",
         "final_trend_score",
         "trend_velocity",
-        "trend_sentiment_signal"
+        "trend_sentiment_signal",
+        "narrative_risk_score",
+        "market_shock"
     ]
 
     X = df[feature_cols]
@@ -311,7 +329,9 @@ def forecast_market_sentiment():
                 "topic_intensity_5": df["topic_intensity_5"].tail(3).mean(),
                 "final_trend_score": df["final_trend_score"].tail(3).mean(),
                 "trend_velocity": df["trend_velocity"].tail(3).mean(),
-                "trend_sentiment_signal": df["trend_sentiment_signal"].tail(3).mean()
+                "trend_sentiment_signal": df["trend_sentiment_signal"].tail(3).mean(),
+                "narrative_risk_score": df["narrative_risk_score"].tail(3).mean(),
+                "market_shock": df["market_shock"].tail(3).mean()
             }])
 
             pred = model.predict(features)[0]
@@ -388,37 +408,98 @@ def forecast_brand_sentiment():
     df = load_brand_metrics()
 
     if df.empty:
-        return {"error": "No brand data"}
+        return {"brand_forecasts": []}
 
+    # -------------------------
+    # PREPROCESS
+    # -------------------------
+    df["brand"] = df["brand"].str.strip().str.lower()
     df = df.sort_values("date")
 
     results = []
 
-    for brand in df["brand"].unique():
+    all_brands = [b.lower() for b in ECOMMERCE_BRANDS]
+
+    # -------------------------
+    # LOOP OVER ALL BRANDS
+    # -------------------------
+    for brand in all_brands:
 
         brand_df = df[df["brand"] == brand].copy()
 
-        if len(brand_df) < 5:
+        # -------------------------
+        # HANDLE NO DATA
+        # -------------------------
+        if brand_df.empty:
+            results.append({
+                "brand": brand,
+                "trend_direction": "No Data",
+                "trend_slope": 0,
+                "forecasts": {
+                    "7_day": [],
+                    "30_day": [],
+                    "90_day": []
+                }
+            })
             continue
 
+        # -------------------------
+        # MIN DATA CHECK
+        # -------------------------
+        if len(brand_df) < 2:
+            results.append({
+                "brand": brand,
+                "trend_direction": "Insufficient Data",
+                "trend_slope": 0,
+                "forecasts": {
+                    "7_day": [],
+                    "30_day": [],
+                    "90_day": []
+                }
+            })
+            continue
+
+        # -------------------------
+        # FEATURE ENGINEERING
+        # -------------------------
+        brand_df = brand_df.sort_values("date")
         brand_df["time_index"] = range(len(brand_df))
 
-        X = brand_df[["time_index"]]
+        feature_cols = ["time_index"]
+
+        if "trend_score" in brand_df.columns:
+            feature_cols.append("trend_score")
+
+        if "trend_velocity" in brand_df.columns:
+            feature_cols.append("trend_velocity")
+
+        X = brand_df[feature_cols]
         y = brand_df["sentiment_index"]
 
+        # -------------------------
+        # MODEL
+        # -------------------------
         model = RandomForestRegressor(
-            n_estimators=200,
-            max_depth=6,
+            n_estimators=100,
+            max_depth=5,
             random_state=42
         )
 
         model.fit(X, y)
 
+        # -------------------------
+        # FORECAST FUNCTION
+        # -------------------------
         def generate(days):
 
             future = pd.DataFrame({
                 "time_index": range(len(brand_df), len(brand_df) + days)
             })
+
+            # fill additional features with last known values
+            for col in feature_cols:
+                if col != "time_index":
+                    future[col] = brand_df[col].tail(3).mean()
 
             preds = model.predict(future)
 
@@ -426,11 +507,15 @@ def forecast_brand_sentiment():
 
             return [round(float(p), 4) for p in preds]
 
+        # -------------------------
+        # TREND DETECTION
+        # -------------------------
         slope = np.polyfit(
             brand_df["time_index"],
             brand_df["sentiment_index"],
             1
         )[0]
+        slope = max(-0.5, min(0.5, slope))  # clamp
 
         if slope > 0.01:
             direction = "Improving"
@@ -439,6 +524,9 @@ def forecast_brand_sentiment():
         else:
             direction = "Stable"
 
+        # -------------------------
+        # STORE RESULT
+        # -------------------------
         results.append({
             "brand": brand,
             "trend_direction": direction,

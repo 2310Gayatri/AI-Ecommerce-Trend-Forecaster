@@ -4,65 +4,32 @@ Ecommerce Market Intelligence Report
 
 Market Overview
 The ecommerce market currently shows a bearish sentiment trend
-with a slope of -0.014318.
+with a slope of -0.040155.
 
-Current sentiment stands at 0.339085.
+Current sentiment stands at 0.195144.
 
 Brand Dynamics
 meesho shows the strongest positive momentum,
 while nykaa is experiencing the sharpest decline.
 
-nykaa currently has the highest volatility.
+meesho currently has the highest volatility.
 
 Narrative Trends
-Top topics today include: technology, funding, other.
+Top topics today include: technology, other, funding.
 
 The most positive topic is expansion,
 while the most negative topic is logistics.
 
 Emerging Narratives
-Fastest rising topic: funding
+Fastest rising topic: technology
 
-Fastest declining topic: other
+Fastest declining topic: partnership
 
 
 AI Market Insight (RAG Analysis)
 --------------------------------
-* Key Market Signals
-  * Inventory pressure and Gulf war concerns are leading to discounts on electronics and home appliances
-  * Dip in smartphone and TV sales
-  * Expansion of services such as vehicle insurance and dark stores
-
-* Brand Impact
-  * Flipkart: facing negative sentiment due to inventory pressure and Gulf war concerns, leading to discounts (Source 1), and expanding dark stores (Source 5)
-  * Amazon India: has a positive sentiment due to discounts (Source 2), and is expanding services like vehicle insurance (Source 2) and technology advancements (Source 4)
-  * Bigbasket: facing negative sentiment due to logistics and profitability checks in the quick commerce space (Source 5)
-  * Reliance Digital: has a neutral sentiment, with no direct relation to the Indian e-commerce market trends (Source 3)
-
-* Consumer Sentiment Drivers
-  * Negative sentiment is driven by inventory pressure, Gulf war concerns, and dip in sales (Source 1)
-  * Positive sentiment is driven by discounts and expansion of services like vehicle insurance (Source 2)
-
-* Strategic Insight
-  * E-commerce companies like Flipkart and Amazon India should focus on offering competitive discounts and expanding their services to attract cautious consumers and maintain market share.
+LLM response skipped due to rate limit.
 
 Risk Signals
 ------------
-* Key Market Signals
-  * Ecommerce players are expanding dark stores and offering discounts due to inventory pressure and concerns over consumer spending (Source 1, Source 2)
-  * There is a broader debate over employment conditions in the last-mile, instant delivery revenue stream (Source 1)
-  * Gulf war concerns are impacting consumer spending (Source 2)
-
-* Brand Impact
-  * bigbasket: facing logistics challenges and sentiment is negative (Source 1)
-  * Flipkart: expanding dark stores and offering discounts, facing pressure on profitability (Source 1, Source 2)
-  * Amazon India: expanding vehicle insurance offerings (Source 4)
-  * Reliance Digital: no specific impact mentioned, but mentioned in neutral sentiment context (Source 3, Source 5)
-
-* Consumer Sentiment Drivers
-  * Negative sentiment is driven by concerns over employment conditions in the last-mile delivery (Source 1)
-  * Positive sentiment is driven by expansion of services such as vehicle insurance offerings (Source 4)
-  * Discounts and inventory pressure are driving consumer spending decisions (Source 2)
-
-* Strategic Insight
-  * Ecommerce players should prioritize logistics and employment conditions in the last-mile delivery to maintain profitability and positive consumer sentiment, as evidenced by the challenges faced by bigbasket and the expansion of services by Amazon India (Source 1, Source 4)
+LLM response skipped due to rate limit.

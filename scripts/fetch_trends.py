@@ -39,7 +39,9 @@ def chunk_list(lst, size=5):
 # MAIN FETCH FUNCTION
 # ---------------------------
 def fetch_trends():
-
+    if not API_KEY:
+        print("⚠️ SERP_API_KEY not found. Skipping trend fetch.")
+        return
     print("Fetching Google Trends data...")
 
     all_data = []
@@ -97,7 +99,7 @@ def fetch_trends():
     df["raw_score"] = df["raw_score"].fillna(0)
 
     # ---------------------------
-    # 🔥 GLOBAL NORMALIZATION (FIX)
+    # 🔥 CREATE trend_score FIRST (REQUIRED)
     # ---------------------------
     max_score = df["raw_score"].max()
 
@@ -107,8 +109,25 @@ def fetch_trends():
         df["trend_score"] = df["raw_score"] / max_score
 
     # ---------------------------
+    # 🔥 BRAND NORMALIZATION (FIX)
+    # ---------------------------
+
+    # 🔥 ADD THIS (brand-wise normalization)
+    df["trend_score"] = df.groupby("brand")["trend_score"].transform(
+        lambda x: (x - x.min()) / (x.max() - x.min() + 1e-6)
+    )
+    df["date_parsed"] = df["date"].str.split("–").str[0]
+
+    df["date_parsed"] = pd.to_datetime(
+        df["date_parsed"],
+        errors="coerce"
+    )
+    # ---------------------------
     # OPTIONAL: SMOOTHING
     # ---------------------------
+    df = df.sort_values(["brand", "date_parsed"])
+
+
     df["trend_score"] = df.groupby("brand")["trend_score"].transform(
         lambda x: x.rolling(3, min_periods=1).mean()
     )
@@ -116,7 +135,10 @@ def fetch_trends():
     # ---------------------------
     # CLEAN
     # ---------------------------
+    df = df.drop(columns=["date_parsed"])
     df = df[["date", "brand", "trend_score"]]
+    df["fetched_at"] = pd.Timestamp.now()
+
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     df.to_csv(OUTPUT_PATH, index=False)

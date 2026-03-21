@@ -6,7 +6,6 @@ import json
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-
 from src.utils.data_loader import (
     load_master_dataset,
     load_daily_metrics,
@@ -93,7 +92,14 @@ def run_market_intelligence():
 
     most_positive_topic = topic_sentiment.index[0]
     most_negative_topic = topic_sentiment.index[-1]
+    # -------------------------
+    # 🔥 Narrative Risk Score (NEW)
+    # -------------------------
+    risk_topics = ["customer_complaints", "logistics"]
 
+    master_df["narrative_risk_score"] = (
+        master_df["topic"].isin(risk_topics).astype(int)
+    )
     # -------------------------
     # 3️⃣ Market Trend
     # -------------------------
@@ -133,6 +139,25 @@ def run_market_intelligence():
     daily_df["final_trend_score"] = daily_df["final_trend_score"].fillna(0)
 
     daily_df = daily_df.sort_values("date")
+    # -------------------------
+    # 🔥 Narrative Risk Aggregation (NEW)
+    # -------------------------
+    risk_daily = (
+        master_df.groupby("date")["narrative_risk_score"]
+        .mean()
+        .reset_index()
+    )
+
+    daily_df = pd.merge(daily_df, risk_daily, on="date", how="left")
+
+    daily_df["narrative_risk_score"] = daily_df["narrative_risk_score"].fillna(0)
+    # -------------------------
+    # 🔥 Market Shock Detection (NEW)
+    # -------------------------
+    daily_df["market_shock"] = (
+            daily_df["final_trend_score"] -
+            daily_df["final_trend_score"].rolling(5).mean()
+    ).fillna(0)
     daily_df["time_index"] = range(len(daily_df))
 
     X = daily_df[["time_index"]]
@@ -182,7 +207,16 @@ def run_market_intelligence():
 
     top_positive_brand = momentum_results[0][0]
     top_negative_brand = momentum_results[-1][0]
+    # -------------------------
+    # 🔥 Sentiment Volatility (NEW)
+    # -------------------------
+    brand_df = brand_df.sort_values(["brand", "date"])
 
+    brand_df["sentiment_volatility"] = (
+        brand_df.groupby("brand")["sentiment_index"]
+        .transform(lambda x: x.rolling(3).std())
+        .fillna(0)
+    )
     # -------------------------
     # 5️⃣ Brand Volatility
     # -------------------------
@@ -225,6 +259,14 @@ def run_market_intelligence():
 
     The fastest rising topic is {fastest_rising_topic},
     while the fastest declining topic is {fastest_declining_topic}.
+    
+    Market shock indicator is currently {round(daily_df["market_shock"].iloc[-1], 3)}.
+
+    Narrative risk level is {round(daily_df["narrative_risk_score"].iloc[-1], 3)},
+    indicating the presence of complaint/logistics-driven narratives.
+
+    Average sentiment volatility across brands is {round(brand_df["sentiment_volatility"].mean(), 3)},
+    suggesting {'high instability' if brand_df["sentiment_volatility"].mean() > 0.2 else 'stable conditions'}.
 
     """
 
@@ -235,17 +277,21 @@ def run_market_intelligence():
     print("Generating RAG market explanation...")
 
     rag_query = f"""
-Explain the current Indian ecommerce market sentiment.
+    Explain the current Indian ecommerce market sentiment.
 
-Market Direction: {market_direction}
-Top Positive Brand: {top_positive_brand}
-Top Negative Brand: {top_negative_brand}
-Top Topics: {top_topics}
-Fastest Rising Topic: {fastest_rising_topic}
-Fastest Declining Topic: {fastest_declining_topic}
+    Market Direction: {market_direction}
+    Market Shock: {round(daily_df["market_shock"].iloc[-1], 3)}
+    Narrative Risk: {round(daily_df["narrative_risk_score"].iloc[-1], 3)}
+    Volatility: {round(brand_df["sentiment_volatility"].mean(), 3)}
 
-Provide a concise explanation of why these trends may be happening.
-"""
+    Top Positive Brand: {top_positive_brand}
+    Top Negative Brand: {top_negative_brand}
+    Top Topics: {top_topics}
+    Fastest Rising Topic: {fastest_rising_topic}
+    Fastest Declining Topic: {fastest_declining_topic}
+
+    Explain the drivers behind these signals and what they imply for the market.
+    """
 
     rag_insight, rag_sources = generate_rag_response(rag_query)
 
@@ -267,6 +313,9 @@ Provide a concise explanation of why these trends may be happening.
         "most_negative_topic": most_negative_topic,
         "fastest_rising_topic": fastest_rising_topic,
         "fastest_declining_topic": fastest_declining_topic,
+        "market_shock": float(daily_df["market_shock"].iloc[-1]),
+        "avg_sentiment_volatility": float(brand_df["sentiment_volatility"].mean()),
+        "narrative_risk": float(daily_df.get("narrative_risk_score", pd.Series([0])).iloc[-1]),
         "rag_market_explanation": rag_insight,
         "rag_sources": rag_sources
     }
