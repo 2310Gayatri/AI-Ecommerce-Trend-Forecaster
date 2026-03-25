@@ -2,8 +2,8 @@ name: Daily Market Pipeline
 
 on:
   schedule:
-    - cron: '0 6 * * *'   # Runs daily at 6 AM UTC
-  workflow_dispatch:       # Allows manual run
+    - cron: '0 6 * * *'   # runs daily at 6 AM UTC
+  workflow_dispatch:       # allows manual trigger
 
 jobs:
   run-pipeline:
@@ -27,4 +27,5 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           SERP_API_KEY: ${{ secrets.SERP_API_KEY }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-        run: python run_market_engine.py
+        run: |
+          python run_market_engine.py
