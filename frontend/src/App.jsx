@@ -5,6 +5,7 @@ import Overview from './pages/Overview';
 import Topics from './pages/Topics';
 import Comparison from './pages/Comparison';
 import Alerts from './pages/Alerts';
+import Sources from './pages/Sources';
 import Chatbot from './components/Chatbot';
 
 function App() {
@@ -74,11 +75,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DashboardLayout lastUpdated={lastUpdated} isError={isError} isSyncing={isSyncing} onRefresh={fetchRealTimeData} />}>
+        <Route path="/" element={<DashboardLayout data={marketData} lastUpdated={lastUpdated} isError={isError} isSyncing={isSyncing} onRefresh={fetchRealTimeData} />}>
           <Route index element={<Overview data={marketData} />} />
           <Route path="topics" element={<Topics data={marketData} />} />
           <Route path="comparison" element={<Comparison data={marketData} />} />
           <Route path="alerts" element={<Alerts data={marketData} />} />
+          <Route path="sources" element={<Sources data={marketData} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

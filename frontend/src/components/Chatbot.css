@@ -44,7 +44,7 @@
 .chatbot-header {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-glass);
-  background: rgba(20, 20, 30, 0.8);
+  background: rgba(237, 237, 241, 0.8);
   font-weight: 600;
 }
 
@@ -74,6 +74,7 @@
   line-height: 1.4;
   white-space: pre-wrap;
   animation: fadeIn 0.3s ease-out forwards;
+  background-color: rgb(100, 124, 145);
 }
 
 .chatbot-message.bot {
@@ -94,7 +95,7 @@
 .chatbot-input-area {
   padding: 1rem;
   border-top: 1px solid var(--border-glass);
-  background: rgba(20, 20, 30, 0.6);
+  background: rgba(197, 197, 202, 0.6);
   display: flex;
   gap: 0.5rem;
 }
@@ -103,7 +104,7 @@
   flex: 1;
   padding: 0.75rem 1rem;
   border-radius: 20px;
-  background: rgba(10, 10, 15, 0.6);
+  background: rgba(247, 247, 250, 0.6);
 }
 
 .chatbot-send-btn {
