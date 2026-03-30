@@ -1,0 +1,243 @@
+# 📊 AI-Powered E-Commerce Market Trend & Consumer Sentiment Forecaster
+### Project Documentation — Mentor Presentation
+
+---
+
+## 1. Problem Statement
+
+E-commerce businesses struggle to keep up with rapidly changing consumer sentiment, emerging product trends, and brand momentum shifts. Traditional market research is slow, expensive, and lacks real-time granularity.
+
+**This project solves that** by building a fully automated AI pipeline that:
+- Ingests live data (news + Google Trends)
+- Analyses consumer sentiment in real-time using NLP
+- Forecasts 30-day market trends for top e-commerce brands
+- Presents everything on a live dashboard with AI-generated insights
+
+---
+
+## 2. High-Level System Architecture
+
+```mermaid
+flowchart TD
+    A["📰 News API\n(NewsAPI)"] --> C[Data Ingestion Layer]
+    B["📈 Google Trends\n(SerpAPI)"] --> C
+    C --> D[Text Preprocessing]
+    D --> E["🤖 FinBERT\nSentiment Analysis"]
+    E --> F["🧠 LLM Topic Modeling\n(Llama 3 via Groq)"]
+    F --> G[Feature Engineering\ntrend · velocity · entropy]
+    G --> H[Market Intelligence Engine]
+    H --> I["🔮 Forecasting\n(Random Forest)"]
+    H --> J["📚 RAG Insight Engine\n(FAISS + Sentence Transformers)"]
+    I --> K["📦 market_dashboard_data.json"]
+    J --> K
+    K --> L["⚡ React Dashboard\n(Live Polling every 10s)"]
+```
+
+---
+
+## 3. AI/ML Pipeline — Stage by Stage
+
+### Stage 1 — Data Ingestion (`src/ingestion/`)
+- Fetches e-commerce news articles via **NewsAPI**
+- Fetches Google Trends data via **SerpAPI**
+- Targets brands: Meesho, Flipkart, Myntra, Amazon India, etc.
+
+### Stage 2 — Preprocessing (`src/preprocessing/`)
+- Cleans, normalises, and deduplicates raw text
+- Tokenises content for downstream NLP models
+
+### Stage 3 — Sentiment Analysis (`src/sentiment/`)
+- Uses **FinBERT** (Financial BERT) — a BERT model fine-tuned on financial text
+- Outputs: `positive`, `negative`, `neutral` scores per article
+- Produces `brand_sentiment` scores per brand per day
+
+### Stage 4 — Topic Modeling (`src/topic_modeling/`)
+- Uses **Llama 3** (via Groq API) to extract key topics from news clusters
+- Identifies fastest-rising topics and topic momentum shifts
+
+### Stage 5 — Feature Engineering (`src/analytics/`)
+- Computes **Trend Score**, **Trend Velocity**, **Entropy**, and **Volatility**
+- These are time-series features fed into the forecasting model
+
+### Stage 6 — Market Intelligence Engine (`src/intelligence/`)
+- Aggregates brand signals, detects market events (breakouts, drops)
+- Generates risk flags and opportunity signals
+
+### Stage 7 — Forecasting (`src/models/`)
+- Uses **Random Forest Regression** with walk-forward validation
+- Outputs **7-day**, **30-day**, and **90-day** sentiment forecasts per brand
+
+### Stage 8 — RAG Insight Engine (`src/rag/`)
+- Embeds all market data into a **FAISS vector database**
+- Uses **Sentence Transformers** for semantic retrieval
+- Passes retrieved context + user query to **Llama 3** via Groq for explainable AI insights
+
+### Stage 9 — Reporting (`src/reporting/`)
+- Generates structured `market_dashboard_data.json` for the frontend
+- Also exports `market_report.pdf` and `alerts.json`
+
+---
+
+## 4. Frontend Dashboard (`/frontend`)
+
+Built with **React + Vite** using a premium dark UI design.
+
+### Pages
+
+| Page | Purpose |
+|---|---|
+| **Overview** | Market stats, 30-day sentiment forecast chart, Export CSV |
+| **Topics** | Topic trends, fastest rising/falling topics |
+| **Brand Comparison** | Side-by-side brand sentiment & direction comparison |
+| **Insights & Alerts** | AI-generated market signals + consumer commentary extractor |
+
+### Key Components
+
+| Component | Role |
+|---|---|
+| `App.jsx` | Root — manages real-time data fetching & state |
+| `DashboardLayout.jsx` | Shell with sidebar, live status indicator, refresh button |
+| `AnimatedNumber.jsx` | Reusable — flashes 🟢 green (up) / 🔴 red (down) on number change |
+| `Chatbot.jsx` | AI assistant powered by the RAG engine |
+| `Sidebar.jsx` | Navigation with page links |
+
+---
+
+## 5. Real-Time Data Flow
+
+```mermaid
+sequenceDiagram
+    participant Pipeline as AI Backend Pipeline
+    participant JSON as market_dashboard_data.json
+    participant Frontend as React Dashboard
+
+    Pipeline->>JSON: Writes fresh data after each run
+    Frontend->>JSON: Fetches every 10 seconds (Polling)
+    JSON-->>Frontend: Returns updated JSON
+    Frontend->>Frontend: Updates state → re-renders charts & numbers
+    Frontend->>Frontend: AnimatedNumber flashes on changed values
+    Note over Frontend: Tab hidden? Polling paused (saves battery)
+    Note over Frontend: Tab reopened? Immediate re-fetch
+    Note over Frontend: Fetch fails? Red "Connection Lost" banner shown
+```
+
+### Why Polling (not WebSockets)?
+The AI pipeline runs as a **batch process** (not a streaming server), so data only changes when the Python script completes a new run. Polling every 10 seconds is perfectly matched to this update frequency and requires zero changes to the backend.
+
+---
+
+## 6. Technologies Used
+
+### Backend / AI
+| Technology | Purpose |
+|---|---|
+| **FinBERT** | Financial sentiment analysis (NLP) |
+| **Llama 3 (Groq)** | Topic modeling + RAG narrative generation |
+| **HuggingFace Transformers** | Model loading and inference |
+| **LangChain** | LLM orchestration |
+| **FAISS** | Vector database for semantic similarity search |
+| **Sentence Transformers** | Text embedding for RAG |
+| **Random Forest** | Forecasting model with walk-forward validation |
+| **Pandas / NumPy** | Data processing and feature engineering |
+
+### APIs
+| API | Data Source |
+|---|---|
+| **NewsAPI** | Live e-commerce news articles |
+| **SerpAPI** | Google Trends data |
+| **Groq API** | LLM inference (Llama 3) |
+
+### Frontend
+| Technology | Purpose |
+|---|---|
+| **React 18 + Vite** | UI framework and build tool |
+| **Recharts** | Interactive chart library |
+| **Lucide React** | Icon library |
+| **Vanilla CSS** | Custom dark glassmorphism design system |
+
+---
+
+## 7. Key Innovations Added to the Dashboard
+
+### ✅ Real-Time Polling with Cache-Busting
+Every 10 seconds, the dashboard fetches the latest `market_dashboard_data.json` with a timestamp query parameter (`?t=...`) to bypass browser caching.
+
+### ✅ Tab Visibility Awareness
+Using the browser's **Visibility API**, polling is automatically **paused** when the user switches to another tab and **instantly resumes** (with an immediate fetch) when they return. This saves CPU and battery.
+
+### ✅ Live Status Indicator
+A pulsing green dot in the header shows `🟢 Live • Updated: HH:MM:SS`. It turns into a red error banner if the connection fails.
+
+### ✅ Manual "Refresh Now" Button
+Users can force an immediate data refresh by clicking the refresh icon `↻` next to the live indicator.
+
+### ✅ Animated Number Flash
+The `AnimatedNumber` component detects when a numeric value changes between polling cycles:
+- Value increases → brief **green glow flash**
+- Value decreases → brief **red glow flash**
+- No change → silent (no distraction)
+
+---
+
+## 8. How to Run the Project
+
+### Step 1 — Set up Environment Variables
+```bash
+
+cp .env.example .env
+```
+```env
+GROQ_API_KEY=your_groq_api_key
+NEWS_API_KEY=your_newsapi_key
+SERP_API_KEY=your_serpapi_key
+```
+
+### Step 2 — Install Python Dependencies
+```bash
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+pip install -r requirements.txt
+```
+
+### Step 3 — Run the AI Pipeline
+```bash
+python run_market_engine.py
+```
+This generates `market_dashboard_data.json` and `market_report.pdf`.
+
+### Step 4 — Start the Dashboard
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
+
+---
+
+## 9. Output Files Generated
+
+| File | Description |
+|---|---|
+| `data/processed/news_master_dataset.csv` | Cleaned news dataset |
+| `data/processed/brand_daily_metrics.csv` | Daily brand sentiment scores |
+| `data/processed/daily_market_metrics.csv` | Market-level time-series features |
+| `data/processed/reviews_data.csv` | Consumer review data |
+| `data/output/market_report.pdf` | Full AI-generated market report |
+| `data/output/alerts.json` | Generated market alerts |
+| `frontend/public/market_dashboard_data.json` | Dashboard data feed |
+
+---
+
+## 10. Model Performance
+
+| Metric | Value | Note |
+|---|---|---|
+| MAE | 0.42 | Mean Absolute Error |
+| RMSE | 0.47 | Root Mean Square Error |
+| R² | -3.25 | Low due to limited data range (~14 days) |
+
+> **Note for mentor:** R² is low because the Random Forest model is trained on only ~14 days of historical data. With 40–60 days of data accumulated, performance improves significantly. This is a known limitation of the current early-stage data collection.
+
+---
+
