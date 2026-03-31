@@ -33,32 +33,18 @@ retriever = None
 
 def get_retriever():
     global retriever
-
-<<<<<<< HEAD
-retriever = vector_store.as_retriever(
-    search_kwargs={"k": 12}  # 🔥 improved context
-)
-=======
     if retriever is None:
         index_file = os.path.join(VECTOR_PATH, "index.faiss")
-
         if not os.path.exists(index_file):
-            raise FileNotFoundError(
-                "Vector store not found. Run pipeline once."
-            )
-
+            raise FileNotFoundError("Vector store not found. Run pipeline once.")
         vector_store = FAISS.load_local(
             VECTOR_PATH,
             get_embedding_model(),
             allow_dangerous_deserialization=True
         )
-
-        retriever = vector_store.as_retriever(
-            search_kwargs={"k": 5}
-        )
-
+        # 🔥 Maintain high context volume (k=12)
+        retriever = vector_store.as_retriever(search_kwargs={"k": 12})
     return retriever
->>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
 # -----------------------------
 # LLM client
@@ -119,17 +105,8 @@ def generate_rag_response(query, k=None):
     # -----------------------------
     # Retrieve
     # -----------------------------
-<<<<<<< HEAD
-    docs = retriever.invoke(enhanced_query)
-    # topic-focused filtering removed to allow more sources
-    # if detected_topic:
-    #     docs = [d for d in docs if detected_topic in d.page_content.lower()]
-=======
     docs = get_retriever().invoke(enhanced_query)
-    # topic-focused filtering
-    if detected_topic:
-        docs = [d for d in docs if detected_topic in d.page_content.lower()]
->>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
+    # Note: Topic filtering is disabled to allow more comprehensive market source retrieval.
 
     if not docs:
         return "No relevant information found.", []
