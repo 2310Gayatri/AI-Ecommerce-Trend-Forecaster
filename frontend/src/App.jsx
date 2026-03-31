@@ -6,6 +6,7 @@ import Topics from './pages/Topics';
 import Comparison from './pages/Comparison';
 import Alerts from './pages/Alerts';
 import Sources from './pages/Sources';
+import News from './pages/News';
 import Chatbot from './components/Chatbot';
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
           <Route path="topics" element={<Topics data={marketData} />} />
           <Route path="comparison" element={<Comparison data={marketData} />} />
           <Route path="alerts" element={<Alerts data={marketData} />} />
+          <Route path="news" element={<News data={marketData} />} />
           <Route path="sources" element={<Sources data={marketData} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
