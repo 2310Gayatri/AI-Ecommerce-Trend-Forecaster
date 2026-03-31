@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { RefreshCw, AlertCircle } from 'lucide-react';
 
-export default function DashboardLayout({ data, lastUpdated, isError, isSyncing, onRefresh }) {
+export default function DashboardLayout({ lastUpdated, isError, isSyncing, onRefresh }) {
   const formatTime = (date) => {
     if (!date) return 'Just now';
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -10,7 +10,7 @@ export default function DashboardLayout({ data, lastUpdated, isError, isSyncing,
 
   return (
     <div className="app-container">
-      <Sidebar data={data} />
+      <Sidebar />
       <main className="main-content">
         {isError && (
           <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -31,21 +31,22 @@ export default function DashboardLayout({ data, lastUpdated, isError, isSyncing,
                <span className="text-sm text-secondary" style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
                  {isError ? 'Disconnected' : `Live • Updated: ${formatTime(lastUpdated)}`}
                </span>
-             <button 
-                onClick={onRefresh} 
-                disabled={isSyncing}
-                className="glass-btn flex items-center gap-2"
-                style={{ height: '32px', fontSize: '0.8rem', padding: '0 1rem' }}
-                title="Force Refresh Data"
-              >
-               <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
-               <span>Refresh</span>
-             </button>
+               <button 
+                 onClick={onRefresh} 
+                 disabled={isSyncing}
+                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px', marginLeft: '4px', display: 'flex', alignItems: 'center', color: '#94a3b8' }}
+                 title="Refresh Dashboard"
+               >
+                 <RefreshCw size={14} style={{ opacity: 0.7 }} className={isSyncing ? "animate-spin" : ""} />
+               </button>
              </div>
              
              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
              <div className="text-sm text-secondary" style={{ display: 'none' }}>Updated Today</div>
+             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+               A
+             </div>
           </div>
         </header>
         <Outlet />

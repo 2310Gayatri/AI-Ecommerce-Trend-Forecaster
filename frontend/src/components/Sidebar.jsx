@@ -1,9 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { Home, BarChart2, TrendingUp, Bell, ExternalLink, Zap, FileText } from 'lucide-react';
+import { Home, BarChart2, TrendingUp, Bell } from 'lucide-react';
 
-export default function Sidebar({ data }) {
-  const sources = data?.consumer_insights?.sources || [];
-
+export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -11,7 +9,7 @@ export default function Sidebar({ data }) {
         <span>Market Forecaster</span>
       </div>
       
-      <nav className="flex-1">
+      <nav>
         <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Home size={20} />
           <span>Overview</span>
@@ -30,11 +28,6 @@ export default function Sidebar({ data }) {
         <NavLink to="/alerts" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           <Bell size={20} />
           <span>Insights & Alerts</span>
-        </NavLink>
-        
-        <NavLink to="/sources" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-          <FileText size={20} />
-          <span>Research Sources & Reference</span>
         </NavLink>
       </nav>
     </aside>
