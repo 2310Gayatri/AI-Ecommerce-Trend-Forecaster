@@ -60,6 +60,61 @@
                 "direction": "Falling"
             },
             {
+                "brand": "pepperfry",
+                "direction": "Stable"
+            },
+            {
+                "brand": "pharmeasy",
+                "direction": "Stable"
+            },
+            {
+                "brand": "reliance digital",
+                "direction": "Rising"
+            },
+            {
+                "brand": "shiprocket",
+                "direction": "Rising"
+            },
+            {
+                "brand": "snapdeal",
+                "direction": "Falling"
+            },
+            {
+                "brand": "swiggy",
+                "direction": "Stable"
+            },
+            {
+                "brand": "tata 1mg",
+                "direction": "Stable"
+            },
+            {
+                "brand": "tata cliq",
+                "direction": "Stable"
+            },
+            {
+                "brand": "urban company",
+                "direction": "Stable"
+            },
+            {
+                "brand": "zara india",
+                "direction": "Falling"
+            },
+            {
+                "brand": "zepto",
+                "direction": "Falling"
+            },
+            {
+                "brand": "zivame",
+                "direction": "Stable"
+            },
+            {
+                "brand": "zomato",
+                "direction": "Falling"
+            }
+        ],
+        "top_positive_brand": "shiprocket",
+        "top_negative_brand": "zomato",
+        "most_volatile_brand": "zomato"
                 "brand": "reliance digital",
                 "direction": "Falling"
             }
@@ -140,6 +195,88 @@
         ],
         "top_negative_brands": [
             {
+                "brand": "ajio",
+                "final_consumer_sentiment": 0.2700672755567789,
+                "raw_sentiment": -0.4598654488864422
+            },
+            {
+                "brand": "shiprocket",
+                "final_consumer_sentiment": 0.348719581731809,
+                "raw_sentiment": -0.3025608365363818
+            },
+            {
+                "brand": "pharmeasy",
+                "final_consumer_sentiment": 0.3519102056975233,
+                "raw_sentiment": -0.2961795886049532
+            }
+        ],
+        "sentiment_distribution": {
+            "positive": 10,
+            "negative": 7,
+            "neutral": 8
+        },
+        "consumer_ai_insight": "**Trend Analysis:**\n\n**Dominant Trend:**\nThe dominant trend is the focus on **discounts** across various ecommerce brands.\n\n**Why it is happening:**\nDiscounts are being offered by several brands, such as Lenskart, Flipkart, and Apple, to attract customers and drive sales. This trend is likely driven by the increased competition in the ecommerce market, where brands are trying to outdo each other with attractive offers.\n\n**Evidence:**\n\n* [Source 5] - Lenskart is offering discounts to attract customers.\n* [Source 9] - Flipkart is offering cash discounts and special offers on iPhone 16 models.\n* [Source 7] is about Apple Pay's India entry dilemma and does not explicitly mention discounts.\n\n**Comparison of Top Positive and Negative Brands:**\n\n**Top Positive Brands:**\n\n* Swiggy (0.63)\n* Lenskart (0.60)\n* Flipkart (0.59)\n\nThese brands are performing well, with Lenskart and Flipkart offering discounts to attract customers.\n\n**Top Negative Brands:**\n\n* Ajio (0.27)\n* Shiprocket (0.35)\n* Pharmeasy (0.35)\n\nThese brands are facing negative sentiment, with no clear reason or evidence provided in the sources.\n\n**Dominant Market Topic:**\nThe dominant market topic driving these trends is **discounts**.\n\n**General Summary:**\nThe ecommerce market is highly competitive, with brands focusing on offering discounts to attract customers. This trend is expected to continue, with brands trying to outdo each other with attractive offers.",
+        "sources": [
+            {
+                "source_id": 1,
+                "content": "\nBrand: firstcry\nTopic: technology\nSentiment: positive\nNews: Gainers & Losers: Firstcry, GMDC and Petronet LNG among 7 top movers on Friday Indian markets closed higher Friday, led by IT gains. Top mo",
+                "url": "https://m.economictimes.com/markets/stocks/news/gainers-amp-losers-firstcry-gmdc-and-petronet-lng-among-7-top-movers-on-friday/slideshow/129700435.cms"
+            },
+            {
+                "source_id": 2,
+                "content": "\nBrand: flipkart\nTopic: logistics\nSentiment: negative\nNews: A summer of worry for food delivery, quick commerce companies Food delivery and quick commerce platforms expect a surge in demand during sum",
+                "url": "https://economictimes.indiatimes.com/tech/technology/a-summer-of-worry-for-food-delivery-quick-commerce-companies/articleshow/129760831.cms"
+            },
+            {
+                "source_id": 3,
+                "content": "\nBrand: reliance digital\nTopic: expansion\nSentiment: neutral\nNews: Like Games & Luxury? Then This Might Be Your Favorite New Platform If you\u2019re into swiping, bidding, and snagging luxury goods at pote",
+                "url": "https://radaronline.com/p/like-games-luxury-then-this-might-be-your-favourite-new-platform/"
+            },
+            {
+                "source_id": 4,
+                "content": "\nBrand: firstcry\nTopic: technology\nSentiment: positive\nNews: Gainers & Losers: HDFC Bank, Gujarat Alkalies among 6 top movers on Monday HDFC Bank, Hindustan Zinc, and FirstCry led the market decline, ",
+                "url": "https://m.economictimes.com/markets/stocks/news/gainers-amp-losers-hdfc-bank-gujarat-alkalies-among-6-top-movers-on-monday/slideshow/129753297.cms"
+            },
+            {
+                "source_id": 5,
+                "content": "\nBrand: lenskart\nTopic: discounts\nSentiment: positive\nNews: Private credit fuels founder buybacks ahead of public listings India\u2019s private credit market has expanded rapidly, with a wave of domestic a",
+                "url": "https://www.livemint.com/companies/promoters-tap-private-credit-firms-to-up-stake-prior-to-public-market-listing-11773123317062.html"
+            },
+            {
+                "source_id": 6,
+                "content": "\nBrand: amazon india\nTopic: discounts\nSentiment: neutral\nNews: Sam Altman Navigates OpenAI's Explosive Growth Amid Rival Bids, Defense Deals and AI's Labor Market Reckoning OpenAI CEO Sam Altman is st",
+                "url": "https://www.ibtimes.com.au/sam-altman-navigates-openais-explosive-growth-amid-rival-bids-defense-deals-ais-labor-market-1864320"
+            },
+            {
+                "source_id": 7,
+                "content": "\nBrand: flipkart\nTopic: expansion\nSentiment: neutral\nNews: Apple Pay\u2019s India entry dilemma; TCS hiring push Happy Tuesday! Apple Pay faces pricing challenges as it works to launch in India. This and m",
+                "url": "https://economictimes.indiatimes.com/tech/newsletters/morning-dispatch/apple-pays-india-entry-dilemma-tcs-hiring-push/articleshow/129765312.cms"
+            },
+            {
+                "source_id": 8,
+                "content": "\nBrand: flipkart\nTopic: logistics\nSentiment: positive\nNews: Food delivery startup Swish raises $38 million; valuation more than doubles Swish has raised $38 million led by UK-based Hara Global and Bai",
+                "url": "https://economictimes.indiatimes.com/tech/funding/food-delivery-startup-swish-raises-38-million-valuation-more-than-doubles/articleshow/129757920.cms"
+            },
+            {
+                "source_id": 9,
+                "content": "\nBrand: flipkart\nTopic: discounts\nSentiment: neutral\nNews: iPhone 16 models get big cash discount, special offers up to Rs 51,000 in latest sale The Apple iPhone 16 series is currently available at di",
+                "url": "https://economictimes.indiatimes.com/magazines/panache/iphone-16-models-get-big-cash-discount-special-offers-upto-rs-51000-in-latest-sale/articleshow/129751601.cms"
+            },
+            {
+                "source_id": 10,
+                "content": "\nBrand: zivame\nTopic: technology\nSentiment: neutral\nNews: Reliance Retail recalibrates fashion play to tap Gen Z demand Azorte and other in-house brands sit at the centre of a strategy built on quicke",
+                "url": "https://www.livemint.com/companies/news/reliance-retail-recalibrates-fashion-play-to-tap-gen-z-demand-zivame-azorte-fast-fashion-11772431066306.html"
+            },
+            {
+                "source_id": 11,
+                "content": "\nBrand: nykaa\nTopic: competition\nSentiment: neutral\nNews: Broker\u2019s Call: \u00a0FSN E-commerce Ventures (Sell) HDFC Securities recommends selling FSN E-commerce Ventures with a target price of \u20b9205, citing ",
+                "url": "https://www.thehindubusinessline.com/markets/brokers-call-fsn-e-commerce-ventures-sell/article70753460.ece"
+            },
+            {
+                "source_id": 12,
+                "content": "\nBrand: ajio\nTopic: expansion\nSentiment: neutral\nNews: Reliance\u2019s e-commerce platform cashes in on Dhurandhar hype with new merch line Reliance fashion platform AJIO has launched a special merchandise",
+                "url": "https://economictimes.indiatimes.com/industry/services/retail/reliances-e-commerce-platform-cashes-in-on-dhurandhar-hype-with-new-merch-line/articleshow/129610729.cms"
+            }
                 "brand": "tata cliq",
                 "final_consumer_sentiment": 0.4323913400116567,
                 "raw_sentiment": -0.1352173199766864
@@ -201,6 +338,145 @@
     "topic_insights": {
         "top_topics": [
             "technology",
+            "expansion",
+            "other"
+        ],
+        "fastest_rising_topic": "customer_complaints",
+        "fastest_declining_topic": "technology"
+    },
+    "forecast": {
+        "7_day": [
+            -0.0295,
+            0.0137,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075
+        ],
+        "30_day": [
+            -0.0295,
+            0.0137,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119
+        ],
+        "90_day": [
+            -0.0295,
+            0.0137,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0124,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0119,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01,
+            0.0075,
+            -0.0048,
+            0.0124,
+            -0.0116,
+            -0.0014,
+            0.0017,
+            0.01
             "other",
             "funding"
         ],

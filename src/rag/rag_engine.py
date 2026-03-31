@@ -34,6 +34,11 @@ retriever = None
 def get_retriever():
     global retriever
 
+<<<<<<< HEAD
+retriever = vector_store.as_retriever(
+    search_kwargs={"k": 12}  # 🔥 improved context
+)
+=======
     if retriever is None:
         index_file = os.path.join(VECTOR_PATH, "index.faiss")
 
@@ -53,6 +58,7 @@ def get_retriever():
         )
 
     return retriever
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
 # -----------------------------
 # LLM client
@@ -92,8 +98,12 @@ def detect_query_type(query):
 # -----------------------------
 # Main RAG function
 # -----------------------------
-def generate_rag_response(query):
-
+def generate_rag_response(query, k=None):
+    """
+    RAG-based response generation from vector search.
+    """
+    if k is not None:
+        retriever.search_kwargs["k"] = k
     query_type = detect_query_type(query)
     if query_type == "brand" and len(query.split()) <= 3:
         query = f"How is the brand {query} performing?"
@@ -104,19 +114,22 @@ def generate_rag_response(query):
             break
     client = get_llm_client()
 
-    enhanced_query = f"""
-    Indian ecommerce trends, brands like flipkart, amazon, meesho, nykaa, ajio.
-    Focus on sentiment, logistics, funding, discounts.
-    Question: {query}
-    """
+    enhanced_query = f"Indian ecommerce market news, brands sentiment and retail trends. {query[:200]}"
 
     # -----------------------------
     # Retrieve
     # -----------------------------
+<<<<<<< HEAD
+    docs = retriever.invoke(enhanced_query)
+    # topic-focused filtering removed to allow more sources
+    # if detected_topic:
+    #     docs = [d for d in docs if detected_topic in d.page_content.lower()]
+=======
     docs = get_retriever().invoke(enhanced_query)
     # topic-focused filtering
     if detected_topic:
         docs = [d for d in docs if detected_topic in d.page_content.lower()]
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
     if not docs:
         return "No relevant information found.", []
@@ -143,7 +156,11 @@ def generate_rag_response(query):
     # Sources
     # -----------------------------
     sources = [
-        {"source_id": i + 1, "content": d.page_content[:200]}
+        {
+            "source_id": i + 1,
+            "content": d.page_content[:200],
+            "url": d.metadata.get("url", "")
+        }
         for i, d in enumerate(docs)
     ]
 
@@ -172,6 +189,8 @@ STRICT RULES:
 - NO hallucination
 - If unsure → say "Not explicitly mentioned"
 - Give CLEAR, SYNTHESIZED answers (not raw summaries)
+- CITE your sources using [Source X] format (e.g., [Source 1], [Source 2]). 
+- Ensure every major claim is attributed to a source.
 
 -----------------------
 CONTEXT:
