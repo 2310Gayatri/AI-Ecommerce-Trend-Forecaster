@@ -25,3 +25,8 @@ sentence-transformers>=2.7
 
 faiss-cpu>=1.7
 reportlab
+google-search-results
+fastapi
+uvicorn
+python-multipart
+pytz

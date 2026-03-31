@@ -2,7 +2,13 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.enums import TA_CENTER
+<<<<<<< HEAD
 from reportlab.lib.colors import HexColor
+=======
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_JUSTIFY
+import re
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 import os
 import json
 import shutil
@@ -17,6 +23,15 @@ FRONTEND_PUBLIC_PATH = os.path.join(BASE_DIR, "frontend", "public", "market_repo
 
 
 def clean_text(text):
+<<<<<<< HEAD
+=======
+    if isinstance(text, tuple):
+        text = text[0]
+
+    if isinstance(text, list):
+        text = " ".join([str(t) for t in text])
+
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
     if text is None:
         return ""
     
@@ -42,6 +57,34 @@ def clean_text(text):
     text = new_text.replace("\n", "<br/>")
     return text
 
+<<<<<<< HEAD
+=======
+    # -------------------------
+    # 🔥 FIX BROKEN WORDS
+    # -------------------------
+    text = re.sub(r"(\w)\s*•\s*(\w)", r"\1-\2", text)
+
+    # -------------------------
+    # 🔥 FIX MARKDOWN BOLD (**)
+    # -------------------------
+    text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
+
+    # -------------------------
+    # 🔥 NORMALIZE BULLETS
+    # -------------------------
+    text = text.replace("\n•", "<br/>• ")
+
+    # -------------------------
+    # 🔥 HANDLE NEWLINES
+    # -------------------------
+    text = text.replace("\n", "<br/>")
+
+    # Remove duplicate breaks
+    while "<br/><br/>" in text:
+        text = text.replace("<br/><br/>", "<br/>")
+
+    return text.strip()
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
 def generate_pdf_report():
     print("🚀 Starting PDF generation (High-Stability Mode)...")
@@ -69,7 +112,23 @@ def generate_pdf_report():
             spaceAfter=10
         )
 
+<<<<<<< HEAD
         elements = []
+=======
+    styles.add(ParagraphStyle(
+        name='Justify',
+        alignment=TA_JUSTIFY,
+        leading=14
+    ))
+
+    styles.add(ParagraphStyle(
+        name='HeadingCustom',
+        parent=styles['Heading2'],
+        spaceAfter=6
+    ))
+
+    elements = []
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
         # Title
         elements.append(Paragraph("<b><font size=18 color='#1e293b'>AI Market Intelligence Report</font></b>", styles["Title"]))
@@ -84,10 +143,15 @@ def generate_pdf_report():
         elements.append(Paragraph(f"Volatility Index: {overview.get('volatility', 0):.2f}", styles["Normal"]))
         elements.append(Spacer(1, 16))
 
+<<<<<<< HEAD
         # AI Insights
         elements.append(Paragraph("AI Market Narrative", header_style))
         elements.append(Paragraph(clean_text(data.get("ai_insight", "AI market story under analysis.")), styles["Normal"]))
         elements.append(Spacer(1, 16))
+=======
+    elements.append(Paragraph("<b>Market Overview</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 8))
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
         # Competitive Landscape
         elements.append(Paragraph("Competitive Intelligence", header_style))
@@ -106,9 +170,14 @@ def generate_pdf_report():
             for alert in alerts[:10]:
                 elements.append(Paragraph(f"• <b>[{alert.get('severity')}]</b> {alert.get('message')} ({alert.get('brand', 'MARKET')})", styles["Normal"]))
 
+<<<<<<< HEAD
         # BUILD THE PDF
         doc.build(elements)
         print(f"✅ Backend PDF Generated: {OUTPUT_PATH}")
+=======
+    elements.append(Paragraph("<b>Brand Insights</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 8))
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e
 
         # SYNC TO FRONTEND DIRECTLY to avoid watcher race conditions on Windows
         if os.path.exists(os.path.dirname(FRONTEND_PUBLIC_PATH)):
@@ -122,5 +191,73 @@ def generate_pdf_report():
         print(f"❌ PDF Generation CRASHED: {e}")
 
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     generate_pdf_report()
+=======
+    elements.append(Paragraph("<b>Topic Insights</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 8))
+
+    elements.append(Paragraph(f"Top Topics: {', '.join(topic['top_topics'])}", styles["Normal"]))
+    elements.append(Paragraph(f"Rising Topic: {topic['fastest_rising_topic']}", styles["Normal"]))
+    elements.append(Paragraph(f"Declining Topic: {topic['fastest_declining_topic']}", styles["Normal"]))
+
+    elements.append(Spacer(1, 16))
+
+    # -------------------------
+    # AI INSIGHTS
+    # -------------------------
+    elements.append(Paragraph("<b>AI Market Insight</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 6))
+    elements.append(Paragraph(clean_text(data["ai_insight"]), styles["Justify"]))
+
+    elements.append(Spacer(1, 16))
+
+    elements.append(Paragraph("<b>Brand AI Insight</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 6))
+    lines = clean_text(data["brand_ai_insight"]).split("<br/>")
+
+    for line in lines:
+        if line.strip():
+            elements.append(Paragraph(line.strip(), styles["Justify"]))
+            elements.append(Spacer(1, 6))
+    elements.append(Spacer(1, 16))
+
+    elements.append(Paragraph("<b>Topic AI Insight</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 6))
+    elements.append(Paragraph(clean_text(data["topic_ai_insight"]), styles["Justify"]))
+
+    elements.append(Spacer(1, 16))
+
+    # -------------------------
+    # RISK
+    # -------------------------
+    elements.append(Paragraph("<b>Risk Signals</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 6))
+    risk_text = clean_text(data["risk_signals"]).split("<br/>")
+
+    for line in risk_text:
+        if line.strip():
+            elements.append(Paragraph(line.strip(), styles["Justify"]))
+            elements.append(Spacer(1, 4))
+
+    elements.append(Spacer(1, 16))
+
+    # -------------------------
+    # ALERTS
+    # -------------------------
+    elements.append(Paragraph("<b>Alerts</b>", styles["HeadingCustom"]))
+    elements.append(Spacer(1, 6))
+
+    for alert in data["alerts"]:
+        elements.append(Paragraph(
+            f"<b>{alert['type']}</b> — {alert['brand']} ({alert['severity']})",
+            styles["Normal"]
+        ))
+
+    elements.append(Spacer(1, 12))
+
+    doc.build(elements)
+
+    print(f"📄 PDF Report Generated: {OUTPUT_PATH}")
+>>>>>>> e5a88b4fa878e3cc6ce353c0e971e1a396ce187e

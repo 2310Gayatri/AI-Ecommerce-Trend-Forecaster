@@ -20,8 +20,10 @@ function App() {
     if (document.hidden) return;
 
     setIsSyncing(true);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""; // Defaults to empty for local/Vercel static serving
     try {
-      const res = await fetch('/market_dashboard_data.json?t=' + new Date().getTime());
+      const endpoint = API_BASE_URL ? `${API_BASE_URL}/dashboard-data` : '/market_dashboard_data.json';
+      const res = await fetch(endpoint + '?t=' + new Date().getTime());
       if (!res.ok) throw new Error('Network response was not ok');
       const data = await res.json();
       setMarketData(data);
