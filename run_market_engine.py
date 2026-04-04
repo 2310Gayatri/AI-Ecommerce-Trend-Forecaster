@@ -30,6 +30,7 @@ from src.reporting.report_generator import generate_pdf_report
 from config import ECOMMERCE_BRANDS
 
 import json
+import shutil
 from datetime import datetime
 import os
 
