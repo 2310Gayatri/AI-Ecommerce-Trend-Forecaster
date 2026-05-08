@@ -2,6 +2,19 @@
 
 An end-to-end AI system that analyzes ecommerce market trends using multi-source data (news + Google Trends + consumer signals) and generates actionable business insights with explainability.
 
+> Developed as part of the Infosys Springboard Virtual Internship Program.
+---
+## 🌐 Live Demo
+
+🚀 Frontend Dashboard:  
+https://market-trend-and-consumer-sentiment-forecaster-front-48sbou50b.vercel.app/
+
+The frontend dashboard is deployed on Vercel and showcases:
+- Market trend analytics
+- Consumer sentiment visualization
+- Forecasting insights
+- Brand comparison dashboards
+- AI-powered market intelligence UI
 ---
 
 ## 📌 Overview
@@ -295,13 +308,16 @@ With more data (40–60 days), performance improves significantly.
 
 ## License
 
-This project is developed for educational and research purposes.
+## License
+
+This project was developed as part of the Infosys Springboard Virtual Internship Program for educational and research purposes.
 
 ---
 
 ## Contributors
 
 Project developed as part of an AI Market Intelligence System for analyzing e-commerce sentiment and trends.
+
 ---
 
 ## 🚀 Deployment on Vercel
